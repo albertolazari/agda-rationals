@@ -1,37 +1,52 @@
 {-# OPTIONS --allow-unsolved-metas #-}
-open import Natural+
-  renaming (_+_ to _+ₙ_)
-  renaming (_×_ to _×ₙ_)
-open import Integer
-  renaming (-_ to -ᵢ_)
-  renaming (_+_ to _+ᵢ_)
-  renaming (_·_ to _·ᵢ_)
+open import Natural+ as N
+  using (ℕ⁺)
+  using (one)
+  using (succ)
+open import Integer as Z
+  using (ℤ)
+  using (zero)
+  using (pos)
+  using (neg)
+  using (_×_)
+open import Option
 
 module Rational where
   data ℚ : Set where
     _/_ : ℤ → ℕ⁺ → ℚ
 
-  infix 5 _≡_
-  data _≡_ : ℚ → ℚ → Set where
-    refl : {x : ℚ} → x ≡ x
-
-  -_ : ℚ → ℚ
-  - (a / b) = (-ᵢ a) / b
-
   _+_ : ℚ → ℚ → ℚ
   (zero / b)  + x       = x
-  (pos a / b) + (c / d) = ((pos a × d) +ᵢ (c × d)) / (b ×ₙ d)
-  (neg a / b) + (c / d) = ((neg a × d) +ᵢ (c × d)) / (b ×ₙ d)
+  (pos a / b) + (c / d) = ((pos a × d) Z.+ (c × d)) / (b N.× d)
+  (neg a / b) + (c / d) = ((neg a × d) Z.+ (c × d)) / (b N.× d)
+
+  -_ : ℚ → ℚ
+  - (a / b) = (Z.- a) / b
+
+  _-_ : ℚ → ℚ → ℚ
+  x - y = x + (- y)
 
   _·_ : ℚ → ℚ → ℚ
-  (a / b) · (c / d) = (a ·ᵢ c) / (b ×ₙ d)
+  (a / b) · (c / d) = (a Z.· c) / (b N.× d)
 
-  _^_ : ℚ → ℤ → ℚ
-  -- zero ^ zero is actually undefined
-  x ^ zero  = pos one / one
-  x ^ pos one = x
-  x ^ pos (succ y) = x · (x ^ pos y)
-  -- undefined...
-  (zero / b) ^ neg y = zero / b
-  (pos x / b) ^ neg y = {!!}
-  (neg x / b) ^ neg y = {!!}
+  _^ₙ_ : ℚ → ℕ⁺ → ℚ
+  x ^ₙ one    = x
+  x ^ₙ succ y = x · (x ^ₙ y)
+
+  _^_ : ℚ → ℤ → Option ℚ
+  x           ^ pos y = item (x ^ₙ y)
+  (zero  / b) ^ neg y = empty
+  (pos a / b) ^ neg y = item ((pos b / a) ^ₙ y)
+  (neg a / b) ^ neg y = item ((neg b / a) ^ₙ y)
+  (zero  / b) ^ zero  = empty
+  (pos a / b) ^ zero  = item (pos one / one)
+  (neg a / b) ^ zero  = item (pos one / one)
+
+  _∶_ : ℚ → ℚ → Option ℚ
+  x ∶ y with y ^ neg one
+  ... | empty    = empty
+  ... | item 1/y = item (x · 1/y)
+
+  infix 5 _≡_
+  data _≡_ : ℚ → ℚ → Set where
+    refl  : {x : ℚ} → x ≡ x
