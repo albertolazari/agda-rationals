@@ -1,14 +1,6 @@
 {-# OPTIONS --allow-unsolved-metas #-}
-open import Natural+ as N
-  using (ℕ⁺)
-  using (one)
-  using (succ)
-open import Integer as Z
-  using (ℤ)
-  using (zero)
-  using (pos)
-  using (neg)
-  using (_×_)
+open import Natural+ as N using (ℕ⁺; one; succ)
+open import Integer as Z using (ℤ; zero; pos; neg; _×_)
 open import Option
 
 module Rational where
@@ -47,6 +39,9 @@ module Rational where
   ... | empty    = empty
   ... | item 1/y = item (x · 1/y)
 
+  GCD : (x y : ℚ) → ℕ⁺
+  GCD x y = {!!}
+
   infix 5 _≡_
   data _≡_ : ℚ → ℚ → Set where
-    refl  : {x : ℚ} → x ≡ x
+    refl : {x : ℚ} → x ≡ x

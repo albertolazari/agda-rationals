@@ -1,7 +1,5 @@
 {-# OPTIONS --allow-unsolved-metas #-}
-open import Natural+
-  renaming (_+_ to _+ₙ_)
-  renaming (_×_ to _×ₙ_)
+open import Natural+ as N using (ℕ⁺; one; succ)
 
 module Integer where
   data ℤ : Set where
@@ -23,21 +21,24 @@ module Integer where
   _+_ : ℤ → ℤ → ℤ
   zero  + y     = y
   pos x + zero  = pos x
-  pos x + pos y = pos (x +ₙ y)
+  pos x + pos y = pos (x N.+ y)
   pos x + neg y = x -ₙ y
   neg x + zero  = neg x
   neg x + pos y = y -ₙ x
-  neg x + neg y = neg (x +ₙ y)
+  neg x + neg y = neg (x N.+ y)
 
   _-_ : ℤ → ℤ → ℤ
   x - y = x + (- y)
 
   _×_ : ℤ → ℕ⁺ → ℤ
   zero  × y = zero
-  pos x × y = pos (x ×ₙ y)
-  neg x × y = neg (x ×ₙ y)
+  pos x × y = pos (x N.× y)
+  neg x × y = neg (x N.× y)
 
   _·_ : ℤ → ℤ → ℤ
   zero  · y = zero
   pos x · y = y × x
   neg x · y = - (y × x)
+
+  GCD : (x y : ℤ) → ℤ
+  GCD x y = {!!}
