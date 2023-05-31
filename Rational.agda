@@ -7,6 +7,12 @@ module Rational where
   data ℚ : Set where
     _/_ : ℤ → ℕ⁺ → ℚ
 
+  num : ℚ → ℤ
+  num (a / b) = a
+
+  den : ℚ → ℕ⁺
+  den (a / b) = b
+
   _+_ : ℚ → ℚ → ℚ
   (zero / b)  + x       = x
   (pos a / b) + (c / d) = ((pos a × d) Z.+ (c × d)) / (b N.× d)
@@ -39,9 +45,8 @@ module Rational where
   ... | empty    = empty
   ... | item 1/y = item (x · 1/y)
 
-  GCD : (x y : ℚ) → ℕ⁺
-  GCD x y = {!!}
+  data Equiv : ℚ → ℚ → Set where
+    eq : {x y : ℚ} → Equiv (x · (pos (den y) / den y)) (y · (pos (den x) / den x))
 
   infix 5 _≡_
   data _≡_ : ℚ → ℚ → Set where
-    refl : {x : ℚ} → x ≡ x

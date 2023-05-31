@@ -39,6 +39,3 @@ module Integer where
   zero  · y = zero
   pos x · y = y × x
   neg x · y = - (y × x)
-
-  GCD : (x y : ℤ) → ℤ
-  GCD x y = {!!}
