@@ -45,8 +45,13 @@ module Rational where
   ... | empty    = empty
   ... | item 1/y = item (x · 1/y)
 
-  data Equiv : ℚ → ℚ → Set where
-    eq : {x y : ℚ} → Equiv (x · (pos (den y) / den y)) (y · (pos (den x) / den x))
+  infix 5 _≈_
+  data _≈_ : ℚ → ℚ → Set where
+    eq : {x y : ℚ} → x · (pos (den y) / den y) ≈ y · (pos (den x) / den x)
 
   infix 5 _≡_
   data _≡_ : ℚ → ℚ → Set where
+    refl : {x : ℚ} → x ≡ x
+
+  lemma-times-one : (x : ℚ) → x · (pos one / one) ≈ x
+  lemma-times-one x = {!!}
