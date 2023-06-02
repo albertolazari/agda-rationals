@@ -1,4 +1,7 @@
 {-# OPTIONS --allow-unsolved-metas #-}
+open import Relation.Binary.PropositionalEquality
+open ≡-Reasoning
+
 open import Natural+ as N using (ℕ⁺; one; succ)
 open import Integer as Z using (ℤ; zero; pos; neg; _×_)
 open import Option
@@ -14,9 +17,18 @@ module Rational where
   den (a / b) = b
 
   _+_ : ℚ → ℚ → ℚ
-  (zero / b)  + x       = x
-  (pos a / b) + (c / d) = ((pos a × d) Z.+ (c × d)) / (b N.× d)
-  (neg a / b) + (c / d) = ((neg a × d) Z.+ (c × d)) / (b N.× d)
+  (a / b) + (c / d) = ((a × d) Z.+ (c × b)) / (b N.× d)
+
+  lemma-+-zero : {x : ℚ} → (zero / one) + x ≡ x
+  lemma-+-zero {a / b} = begin
+    (zero / one) + (a / b)                   ≡⟨⟩
+    ((zero × b) Z.+ (a × one)) / (one N.× b) ≡⟨⟩
+    (zero       Z.+ (a × one)) / b           ≡⟨⟩
+                    (a × one)  / b           ≡⟨ {!!} ⟩
+                    a          / b           ∎
+
+  lemma-+-commutative : (x y : ℚ) → x + y ≡ y + x
+  lemma-+-commutative x y = {!!}
 
   -_ : ℚ → ℚ
   - (a / b) = (Z.- a) / b
@@ -24,8 +36,20 @@ module Rational where
   _-_ : ℚ → ℚ → ℚ
   x - y = x + (- y)
 
+  lemma-negation : {x : ℚ} → (zero / one) - x ≡ - x
+  lemma-negation = {!!}
+
+  lemma-sub-zero : {x : ℚ} → x - (zero / one) ≡ x
+  lemma-sub-zero = {!!}
+
   _·_ : ℚ → ℚ → ℚ
   (a / b) · (c / d) = (a Z.· c) / (b N.× d)
+
+  lemma-times-one : {x : ℚ} → x · (pos one / one) ≡ x
+  lemma-times-one = {!!}
+
+  lemma-times-commutative : {x y : ℚ} → x · y ≡ y · x
+  lemma-times-commutative = {!!}
 
   _^ₙ_ : ℚ → ℕ⁺ → ℚ
   x ^ₙ one    = x
@@ -44,14 +68,3 @@ module Rational where
   x ∶ y with y ^ neg one
   ... | empty    = empty
   ... | item 1/y = item (x · 1/y)
-
-  infix 5 _≈_
-  data _≈_ : ℚ → ℚ → Set where
-    eq : {x y : ℚ} → x · (pos (den y) / den y) ≈ y · (pos (den x) / den x)
-
-  infix 5 _≡_
-  data _≡_ : ℚ → ℚ → Set where
-    refl : {x : ℚ} → x ≡ x
-
-  lemma-times-one : (x : ℚ) → x · (pos one / one) ≈ x
-  lemma-times-one x = {!!}

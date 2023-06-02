@@ -1,4 +1,6 @@
 {-# OPTIONS --allow-unsolved-metas #-}
+open import Relation.Binary.PropositionalEquality
+
 open import Natural+ as N using (ℕ⁺; one; succ)
 
 module Integer where
@@ -34,6 +36,11 @@ module Integer where
   zero  × y = zero
   pos x × y = pos (x N.× y)
   neg x × y = neg (x N.× y)
+
+  lemma-×-one : {x y : ℤ} → x × one ≡ x
+  lemma-×-one {zero}  = refl
+  lemma-×-one {pos x} = cong pos N.lemma-×-one
+  lemma-×-one {neg x} = cong neg N.lemma-×-one
 
   _·_ : ℤ → ℤ → ℤ
   zero  · y = zero
