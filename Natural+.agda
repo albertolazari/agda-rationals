@@ -12,11 +12,22 @@ module Natural+ where
   succ x + y = succ (x + y)
 
   lemma-+-one : {x : ℕ⁺} → succ x ≡ x + one
-  lemma-+-one {x} = {!!}
+  lemma-+-one {one} = refl
+  lemma-+-one {succ x} with lemma-+-one {x}
+  ... | rec = cong succ rec
+
+  lemma-+-associative : (x y z : ℕ⁺) → (x + y) + z ≡ x + (y + z)
+  lemma-+-associative x y z = {!!}
 
   lemma-+-commutative : (x y : ℕ⁺) → x + y ≡ y + x
   lemma-+-commutative one      y = lemma-+-one
-  lemma-+-commutative (succ x) y = {!!}
+  lemma-+-commutative (succ x) y = begin
+    succ x + y    ≡⟨⟩
+    succ (x + y)  ≡⟨ cong succ (lemma-+-commutative x y) ⟩
+    succ (y + x)  ≡⟨ lemma-+-one ⟩
+    (y + x) + one ≡⟨ lemma-+-associative y x one ⟩
+    y + (x + one) ≡⟨ cong (y +_) (sym lemma-+-one) ⟩
+    y + succ x    ∎
 
   _×_ : ℕ⁺ → ℕ⁺ → ℕ⁺
   one    × y = y
