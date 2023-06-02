@@ -12,9 +12,8 @@ module Natural+ where
   succ x + y = succ (x + y)
 
   lemma-+-one : {x : ℕ⁺} → succ x ≡ x + one
-  lemma-+-one {one} = refl
-  lemma-+-one {succ x} with lemma-+-one
-  ... | rec = cong succ rec
+  lemma-+-one {one}    = refl
+  lemma-+-one {succ x} = cong succ lemma-+-one
 
   lemma-+-associative : (x y z : ℕ⁺) → (x + y) + z ≡ x + (y + z)
   lemma-+-associative one      y z = refl
