@@ -10,17 +10,20 @@ module Rational where
   data ℚ : Set where
     _/_ : ℤ → ℕ⁺ → ℚ
 
-  num : ℚ → ℤ
-  num (a / b) = a
+  transport-on-num : {x y : ℤ} {b : ℕ⁺} → x ≡ y → x / b ≡ y / b
+  transport-on-num refl = refl
 
-  den : ℚ → ℕ⁺
-  den (a / b) = b
+  transport-on-den : {x y : ℕ⁺} {a : ℤ} → x ≡ y → a / x ≡ a / y
+  transport-on-den refl = refl
 
   _+_ : ℚ → ℚ → ℚ
   (a / b) + (c / d) = ((a × d) Z.+ (c × b)) / (b N.× d)
 
   lemma-+-commutative : (x y : ℚ) → x + y ≡ y + x
-  lemma-+-commutative (a / b) (c / d) = {!!}
+  lemma-+-commutative (a / b) (c / d) = begin
+    ((a × d) Z.+ (c × b)) / (b N.× d) ≡⟨ transport-on-num (Z.lemma-+-commutative (a × d) (c × b)) ⟩
+    ((c × b) Z.+ (a × d)) / (b N.× d) ≡⟨ transport-on-den (N.lemma-×-commutative b d) ⟩
+    ((c × b) Z.+ (a × d)) / (d N.× b) ∎
 
   lemma-+-zero₁ : {x : ℚ} → (zero / one) + x ≡ x
   lemma-+-zero₁ {a / b} = begin
@@ -29,9 +32,6 @@ module Rational where
     (zero       Z.+ (a × one)) / b           ≡⟨⟩
                     (a × one)  / b           ≡⟨ transport-on-num Z.lemma-×-one ⟩
                     a          / b           ∎
-    where
-    transport-on-num : {x y : ℤ} {b : ℕ⁺} → x ≡ y → x / b ≡ y / b
-    transport-on-num refl = refl
 
   lemma-+-zero₂ : {x : ℚ} →  x + (zero / one) ≡ x
   lemma-+-zero₂ {x} = begin
