@@ -39,4 +39,12 @@ module Natural+ where
   lemma-×-one {succ x} = cong succ lemma-×-one
 
   lemma-×-commutative : (x y : ℕ⁺) → x × y ≡ y × x
-  lemma-×-commutative x y = {!!}
+  lemma-×-commutative one      y        = sym lemma-×-one
+  lemma-×-commutative (succ x) one      = lemma-×-one
+  lemma-×-commutative (succ x) (succ y) = begin
+    succ x × succ y ≡⟨⟩
+    succ (y + (x × succ y)) ≡⟨ cong succ (cong (y +_) (lemma-×-commutative x (succ y)))  ⟩
+    succ (y + (succ y × x)) ≡⟨⟩
+    succ (y + (x + (y × x))) ≡⟨⟩
+    succ y + (x + (y × x)) ≡⟨ {!!} ⟩
+    succ y × succ x ∎
