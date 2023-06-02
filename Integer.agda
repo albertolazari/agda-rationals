@@ -35,11 +35,13 @@ module Integer where
   lemma-+-zero {neg x} = refl
 
   lemma-+-commutative : (x y : ℤ) → x + y ≡ y + x
-  lemma-+-commutative zero zero = refl
-  lemma-+-commutative zero (pos x) = refl
-  lemma-+-commutative zero (neg x) = refl
-  lemma-+-commutative (pos x) y = {!!}
-  lemma-+-commutative (neg x) y = {!!}
+  lemma-+-commutative zero    y       = sym lemma-+-zero
+  lemma-+-commutative (pos x) zero    = refl
+  lemma-+-commutative (pos x) (pos y) = cong pos (N.lemma-+-commutative x y)
+  lemma-+-commutative (pos x) (neg y) = refl
+  lemma-+-commutative (neg x) zero    = refl
+  lemma-+-commutative (neg x) (pos y) = refl
+  lemma-+-commutative (neg x) (neg y) = cong neg (N.lemma-+-commutative x y)
 
   _-_ : ℤ → ℤ → ℤ
   x - y = x + (- y)
