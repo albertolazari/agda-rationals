@@ -19,16 +19,25 @@ module Rational where
   _+_ : ℚ → ℚ → ℚ
   (a / b) + (c / d) = ((a × d) Z.+ (c × b)) / (b N.× d)
 
-  lemma-+-zero : {x : ℚ} → (zero / one) + x ≡ x
-  lemma-+-zero {a / b} = begin
+  lemma-+-commutative : (x y : ℚ) → x + y ≡ y + x
+  lemma-+-commutative (a / b) (c / d) = {!!}
+
+  lemma-+-zero₁ : {x : ℚ} → (zero / one) + x ≡ x
+  lemma-+-zero₁ {a / b} = begin
     (zero / one) + (a / b)                   ≡⟨⟩
     ((zero × b) Z.+ (a × one)) / (one N.× b) ≡⟨⟩
     (zero       Z.+ (a × one)) / b           ≡⟨⟩
-                    (a × one)  / b           ≡⟨ {!!} ⟩
+                    (a × one)  / b           ≡⟨ transport-on-num Z.lemma-×-one ⟩
                     a          / b           ∎
+    where
+    transport-on-num : {x y : ℤ} {b : ℕ⁺} → x ≡ y → x / b ≡ y / b
+    transport-on-num refl = refl
 
-  lemma-+-commutative : (x y : ℚ) → x + y ≡ y + x
-  lemma-+-commutative x y = {!!}
+  lemma-+-zero₂ : {x : ℚ} →  x + (zero / one) ≡ x
+  lemma-+-zero₂ {x} = begin
+    x + (zero / one) ≡⟨ lemma-+-commutative x (zero / one) ⟩
+    (zero / one) + x ≡⟨ lemma-+-zero₁ ⟩
+    x                ∎
 
   -_ : ℚ → ℚ
   - (a / b) = (Z.- a) / b
@@ -37,19 +46,25 @@ module Rational where
   x - y = x + (- y)
 
   lemma-negation : {x : ℚ} → (zero / one) - x ≡ - x
-  lemma-negation = {!!}
+  lemma-negation {x} = begin
+    (zero / one) - x     ≡⟨⟩
+    (zero / one) + (- x) ≡⟨ lemma-+-zero₁ ⟩
+    - x                  ∎
 
   lemma-sub-zero : {x : ℚ} → x - (zero / one) ≡ x
-  lemma-sub-zero = {!!}
+  lemma-sub-zero {x} = begin
+    x - (zero / one)     ≡⟨⟩
+    x + (- (zero / one)) ≡⟨ lemma-+-zero₂ ⟩
+    x                    ∎
 
   _·_ : ℚ → ℚ → ℚ
   (a / b) · (c / d) = (a Z.· c) / (b N.× d)
 
-  lemma-times-one : {x : ℚ} → x · (pos one / one) ≡ x
-  lemma-times-one = {!!}
+  lemma-·-one : {x : ℚ} → x · (pos one / one) ≡ x
+  lemma-·-one = {!!}
 
-  lemma-times-commutative : {x y : ℚ} → x · y ≡ y · x
-  lemma-times-commutative = {!!}
+  lemma-·-commutative : {x y : ℚ} → x · y ≡ y · x
+  lemma-·-commutative = {!!}
 
   _^ₙ_ : ℚ → ℕ⁺ → ℚ
   x ^ₙ one    = x

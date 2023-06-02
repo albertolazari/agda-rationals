@@ -29,6 +29,18 @@ module Integer where
   neg x + pos y = y -ₙ x
   neg x + neg y = neg (x N.+ y)
 
+  lemma-+-zero : {x : ℤ} → x + zero ≡ x
+  lemma-+-zero {zero}  = refl
+  lemma-+-zero {pos x} = refl
+  lemma-+-zero {neg x} = refl
+
+  lemma-+-commutative : (x y : ℤ) → x + y ≡ y + x
+  lemma-+-commutative zero zero = refl
+  lemma-+-commutative zero (pos x) = refl
+  lemma-+-commutative zero (neg x) = refl
+  lemma-+-commutative (pos x) y = {!!}
+  lemma-+-commutative (neg x) y = {!!}
+
   _-_ : ℤ → ℤ → ℤ
   x - y = x + (- y)
 
@@ -37,7 +49,7 @@ module Integer where
   pos x × y = pos (x N.× y)
   neg x × y = neg (x N.× y)
 
-  lemma-×-one : {x y : ℤ} → x × one ≡ x
+  lemma-×-one : {x : ℤ} → x × one ≡ x
   lemma-×-one {zero}  = refl
   lemma-×-one {pos x} = cong pos N.lemma-×-one
   lemma-×-one {neg x} = cong neg N.lemma-×-one
