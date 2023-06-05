@@ -41,9 +41,20 @@ module Natural+ where
   lemma-×-commutative one      y        = sym lemma-×-one
   lemma-×-commutative (succ x) one      = lemma-×-one
   lemma-×-commutative (succ x) (succ y) = begin
-    succ x × succ y ≡⟨⟩
-    succ (y + (x × succ y)) ≡⟨ cong succ (cong (y +_) (lemma-×-commutative x (succ y)))  ⟩
-    succ (y + (succ y × x)) ≡⟨⟩
-    succ (y + (x + (y × x))) ≡⟨⟩
-    succ y + (x + (y × x)) ≡⟨ {!!} ⟩
-    succ y × succ x ∎
+    succ x × succ y          ≡⟨⟩
+    succ (y + (x × succ y))  ≡⟨ cong succ (cong (y +_) (lemma-×-commutative x (succ y)))  ⟩
+    succ (y + (succ y × x))  ≡⟨⟩
+    succ (y + (x + (y × x))) ≡⟨ cong succ (lemma-+-comm-ass y x (y × x)) ⟩
+    succ (x + (y + (y × x))) ≡⟨ cong succ (cong (x +_) (cong (y +_) (lemma-×-commutative y x))) ⟩
+    succ (x + (y + (x × y))) ≡⟨⟩
+    succ x + (succ x × y)    ≡⟨ cong succ (cong (x +_) (lemma-×-commutative (succ x) y)) ⟩
+    succ x + (y × succ x)    ≡⟨⟩
+    succ y × succ x          ∎
+
+    where
+    lemma-+-comm-ass : (x y z : ℕ⁺) → x + (y + z) ≡ y + (x + z)
+    lemma-+-comm-ass x y z = begin
+      x + (y + z) ≡⟨ sym (lemma-+-associative x y z) ⟩
+      (x + y) + z ≡⟨ cong (_+ z) (lemma-+-commutative x y) ⟩
+      (y + x) + z ≡⟨ lemma-+-associative y x z ⟩
+      y + (x + z) ∎

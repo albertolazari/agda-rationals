@@ -31,7 +31,7 @@ module Rational where
     ((zero × b) Z.+ (a × one)) / (one N.× b) ≡⟨⟩
     (zero       Z.+ (a × one)) / b           ≡⟨⟩
                     (a × one)  / b           ≡⟨ transport-on-num Z.lemma-×-one ⟩
-                    a          / b           ∎
+                             a / b           ∎
 
   lemma-+-zero₂ : {x : ℚ} →  x + (zero / one) ≡ x
   lemma-+-zero₂ {x} = begin
@@ -61,10 +61,19 @@ module Rational where
   (a / b) · (c / d) = (a Z.· c) / (b N.× d)
 
   lemma-·-one : {x : ℚ} → x · (pos one / one) ≡ x
-  lemma-·-one = {!!}
+  lemma-·-one {a / b} = begin
+    (a / b) · (pos one / one)     ≡⟨⟩
+    (a Z.· pos one) / (b N.× one) ≡⟨ transport-on-num Z.lemma-·-one ⟩
+    a / (b N.× one)               ≡⟨ transport-on-den N.lemma-×-one ⟩
+    a / b                         ∎
 
-  lemma-·-commutative : {x y : ℚ} → x · y ≡ y · x
-  lemma-·-commutative = {!!}
+  lemma-·-commutative : (x y : ℚ) → x · y ≡ y · x
+  lemma-·-commutative (a / b) (c / d) = begin
+    (a / b) · (c / d)     ≡⟨⟩
+    (a Z.· c) / (b N.× d) ≡⟨ transport-on-num (Z.lemma-·-commutative a c) ⟩
+    (c Z.· a) / (b N.× d) ≡⟨ transport-on-den (N.lemma-×-commutative b d) ⟩
+    (c Z.· a) / (d N.× b) ≡⟨⟩
+    (c / d) · (a / b)     ∎
 
   _^ₙ_ : ℚ → ℕ⁺ → ℚ
   x ^ₙ one    = x

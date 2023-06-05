@@ -60,3 +60,22 @@ module Integer where
   zero  · y = zero
   pos x · y = y × x
   neg x · y = - (y × x)
+
+  lemma-·-zero : {x : ℤ} → x · zero ≡ zero
+  lemma-·-zero {zero}  = refl
+  lemma-·-zero {pos x} = refl
+  lemma-·-zero {neg x} = refl
+
+  lemma-·-one : {x : ℤ} → x · pos one ≡ x
+  lemma-·-one {zero}  = refl
+  lemma-·-one {pos x} = refl
+  lemma-·-one {neg x} = refl
+
+  lemma-·-commutative : (x y : ℤ) → x · y ≡ y · x
+  lemma-·-commutative zero    y       = sym (lemma-·-zero {y})
+  lemma-·-commutative (pos x) zero    = refl
+  lemma-·-commutative (pos x) (pos y) = cong pos (N.lemma-×-commutative y x)
+  lemma-·-commutative (pos x) (neg y) = cong neg (N.lemma-×-commutative y x)
+  lemma-·-commutative (neg x) zero    = refl
+  lemma-·-commutative (neg x) (pos y) = cong neg (N.lemma-×-commutative y x)
+  lemma-·-commutative (neg x) (neg y) = cong pos (N.lemma-×-commutative y x)
