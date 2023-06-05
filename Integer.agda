@@ -1,7 +1,7 @@
 {-# OPTIONS --allow-unsolved-metas #-}
 open import Relation.Binary.PropositionalEquality
 
-open import Natural+ as N using (ℕ⁺; one; succ)
+open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
 
 module Integer where
   data ℤ : Set where
@@ -23,11 +23,11 @@ module Integer where
   _+_ : ℤ → ℤ → ℤ
   zero  + y     = y
   pos x + zero  = pos x
-  pos x + pos y = pos (x N.+ y)
+  pos x + pos y = pos (x ℕ⁺.+ y)
   pos x + neg y = x -ₙ y
   neg x + zero  = neg x
   neg x + pos y = y -ₙ x
-  neg x + neg y = neg (x N.+ y)
+  neg x + neg y = neg (x ℕ⁺.+ y)
 
   lemma-+-zero : {x : ℤ} → x + zero ≡ x
   lemma-+-zero {zero}  = refl
@@ -37,24 +37,24 @@ module Integer where
   lemma-+-commutative : (x y : ℤ) → x + y ≡ y + x
   lemma-+-commutative zero    y       = sym lemma-+-zero
   lemma-+-commutative (pos x) zero    = refl
-  lemma-+-commutative (pos x) (pos y) = cong pos (N.lemma-+-commutative x y)
+  lemma-+-commutative (pos x) (pos y) = cong pos (ℕ⁺.lemma-+-commutative x y)
   lemma-+-commutative (pos x) (neg y) = refl
   lemma-+-commutative (neg x) zero    = refl
   lemma-+-commutative (neg x) (pos y) = refl
-  lemma-+-commutative (neg x) (neg y) = cong neg (N.lemma-+-commutative x y)
+  lemma-+-commutative (neg x) (neg y) = cong neg (ℕ⁺.lemma-+-commutative x y)
 
   _-_ : ℤ → ℤ → ℤ
   x - y = x + (- y)
 
   _×_ : ℤ → ℕ⁺ → ℤ
   zero  × y = zero
-  pos x × y = pos (x N.× y)
-  neg x × y = neg (x N.× y)
+  pos x × y = pos (x ℕ⁺.× y)
+  neg x × y = neg (x ℕ⁺.× y)
 
   lemma-×-one : {x : ℤ} → x × one ≡ x
   lemma-×-one {zero}  = refl
-  lemma-×-one {pos x} = cong pos N.lemma-×-one
-  lemma-×-one {neg x} = cong neg N.lemma-×-one
+  lemma-×-one {pos x} = cong pos ℕ⁺.lemma-×-one
+  lemma-×-one {neg x} = cong neg ℕ⁺.lemma-×-one
 
   _·_ : ℤ → ℤ → ℤ
   zero  · y = zero
@@ -74,8 +74,8 @@ module Integer where
   lemma-·-commutative : (x y : ℤ) → x · y ≡ y · x
   lemma-·-commutative zero    y       = sym (lemma-·-zero {y})
   lemma-·-commutative (pos x) zero    = refl
-  lemma-·-commutative (pos x) (pos y) = cong pos (N.lemma-×-commutative y x)
-  lemma-·-commutative (pos x) (neg y) = cong neg (N.lemma-×-commutative y x)
+  lemma-·-commutative (pos x) (pos y) = cong pos (ℕ⁺.lemma-×-commutative y x)
+  lemma-·-commutative (pos x) (neg y) = cong neg (ℕ⁺.lemma-×-commutative y x)
   lemma-·-commutative (neg x) zero    = refl
-  lemma-·-commutative (neg x) (pos y) = cong neg (N.lemma-×-commutative y x)
-  lemma-·-commutative (neg x) (neg y) = cong pos (N.lemma-×-commutative y x)
+  lemma-·-commutative (neg x) (pos y) = cong neg (ℕ⁺.lemma-×-commutative y x)
+  lemma-·-commutative (neg x) (neg y) = cong pos (ℕ⁺.lemma-×-commutative y x)

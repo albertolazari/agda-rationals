@@ -2,13 +2,19 @@
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 
-open import Natural+ as N using (ℕ⁺; one; succ)
-open import Integer as Z using (ℤ; zero; pos; neg; _×_)
+open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
+open import Integer as ℤ using (ℤ; zero; pos; neg; _×_)
 open import Option
 
 module Rational where
   data ℚ : Set where
     _/_ : ℤ → ℕ⁺ → ℚ
+
+  num : ℚ → ℤ
+  num (a / b) = a
+
+  den : ℚ → ℕ⁺
+  den (a / b) = b
 
   transport-on-num : {x y : ℤ} {b : ℕ⁺} → x ≡ y → x / b ≡ y / b
   transport-on-num refl = refl
@@ -17,20 +23,20 @@ module Rational where
   transport-on-den refl = refl
 
   _+_ : ℚ → ℚ → ℚ
-  (a / b) + (c / d) = ((a × d) Z.+ (c × b)) / (b N.× d)
+  (a / b) + (c / d) = ((a × d) ℤ.+ (c × b)) / (b ℕ⁺.× d)
 
   lemma-+-commutative : (x y : ℚ) → x + y ≡ y + x
   lemma-+-commutative (a / b) (c / d) = begin
-    ((a × d) Z.+ (c × b)) / (b N.× d) ≡⟨ transport-on-num (Z.lemma-+-commutative (a × d) (c × b)) ⟩
-    ((c × b) Z.+ (a × d)) / (b N.× d) ≡⟨ transport-on-den (N.lemma-×-commutative b d) ⟩
-    ((c × b) Z.+ (a × d)) / (d N.× b) ∎
+    ((a × d) ℤ.+ (c × b)) / (b ℕ⁺.× d) ≡⟨ transport-on-num (ℤ.lemma-+-commutative (a × d) (c × b)) ⟩
+    ((c × b) ℤ.+ (a × d)) / (b ℕ⁺.× d) ≡⟨ transport-on-den (ℕ⁺.lemma-×-commutative b d) ⟩
+    ((c × b) ℤ.+ (a × d)) / (d ℕ⁺.× b) ∎
 
   lemma-+-zero₁ : {x : ℚ} → (zero / one) + x ≡ x
   lemma-+-zero₁ {a / b} = begin
     (zero / one) + (a / b)                   ≡⟨⟩
-    ((zero × b) Z.+ (a × one)) / (one N.× b) ≡⟨⟩
-    (zero       Z.+ (a × one)) / b           ≡⟨⟩
-                    (a × one)  / b           ≡⟨ transport-on-num Z.lemma-×-one ⟩
+    ((zero × b) ℤ.+ (a × one)) / (one ℕ⁺.× b) ≡⟨⟩
+    (zero       ℤ.+ (a × one)) / b           ≡⟨⟩
+                    (a × one)  / b           ≡⟨ transport-on-num ℤ.lemma-×-one ⟩
                              a / b           ∎
 
   lemma-+-zero₂ : {x : ℚ} →  x + (zero / one) ≡ x
@@ -40,7 +46,7 @@ module Rational where
     x                ∎
 
   -_ : ℚ → ℚ
-  - (a / b) = (Z.- a) / b
+  - (a / b) = (ℤ.- a) / b
 
   _-_ : ℚ → ℚ → ℚ
   x - y = x + (- y)
@@ -58,21 +64,21 @@ module Rational where
     x                    ∎
 
   _·_ : ℚ → ℚ → ℚ
-  (a / b) · (c / d) = (a Z.· c) / (b N.× d)
+  (a / b) · (c / d) = (a ℤ.· c) / (b ℕ⁺.× d)
 
   lemma-·-one : {x : ℚ} → x · (pos one / one) ≡ x
   lemma-·-one {a / b} = begin
     (a / b) · (pos one / one)     ≡⟨⟩
-    (a Z.· pos one) / (b N.× one) ≡⟨ transport-on-num Z.lemma-·-one ⟩
-    a / (b N.× one)               ≡⟨ transport-on-den N.lemma-×-one ⟩
+    (a ℤ.· pos one) / (b ℕ⁺.× one) ≡⟨ transport-on-num ℤ.lemma-·-one ⟩
+    a / (b ℕ⁺.× one)               ≡⟨ transport-on-den ℕ⁺.lemma-×-one ⟩
     a / b                         ∎
 
   lemma-·-commutative : (x y : ℚ) → x · y ≡ y · x
   lemma-·-commutative (a / b) (c / d) = begin
     (a / b) · (c / d)     ≡⟨⟩
-    (a Z.· c) / (b N.× d) ≡⟨ transport-on-num (Z.lemma-·-commutative a c) ⟩
-    (c Z.· a) / (b N.× d) ≡⟨ transport-on-den (N.lemma-×-commutative b d) ⟩
-    (c Z.· a) / (d N.× b) ≡⟨⟩
+    (a ℤ.· c) / (b ℕ⁺.× d) ≡⟨ transport-on-num (ℤ.lemma-·-commutative a c) ⟩
+    (c ℤ.· a) / (b ℕ⁺.× d) ≡⟨ transport-on-den (ℕ⁺.lemma-×-commutative b d) ⟩
+    (c ℤ.· a) / (d ℕ⁺.× b) ≡⟨⟩
     (c / d) · (a / b)     ∎
 
   _^ₙ_ : ℚ → ℕ⁺ → ℚ
