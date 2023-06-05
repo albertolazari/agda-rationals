@@ -3,7 +3,7 @@ open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
 
 open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
-open import Integer as ℤ using (ℤ; zero; pos; neg; _×_)
+open import Integer  as ℤ  using (ℤ; zero; pos; neg; _×_)
 open import Option
 
 module Rational where
