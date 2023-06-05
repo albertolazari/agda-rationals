@@ -10,6 +10,12 @@ module Rational where
 data ℚ : Set where
   _/_ : ℤ → ℕ⁺ → ℚ
 
+num : ℚ → ℤ
+num (a / b) = a
+
+den : ℚ → ℕ⁺
+den (a / b) = b 
+
 transport-on-num : {x y : ℤ} {b : ℕ⁺} → x ≡ y → x / b ≡ y / b
 transport-on-num refl = refl
 
