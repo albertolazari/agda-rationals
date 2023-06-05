@@ -79,3 +79,6 @@ lemma-·-commutative (pos x) (neg y) = cong neg (ℕ⁺.lemma-×-commutative y x
 lemma-·-commutative (neg x) zero    = refl
 lemma-·-commutative (neg x) (pos y) = cong neg (ℕ⁺.lemma-×-commutative y x)
 lemma-·-commutative (neg x) (neg y) = cong pos (ℕ⁺.lemma-×-commutative y x)
+
+lemma-·-associative : (a b c : ℤ) → (a · b) · c ≡ a · (b · c)
+lemma-·-associative a b c = {!!}

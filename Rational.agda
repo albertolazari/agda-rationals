@@ -16,6 +16,9 @@ num (a / b) = a
 den : ℚ → ℕ⁺
 den (a / b) = b 
 
+ℤ-den : ℚ → ℤ
+ℤ-den (a / b) = pos b 
+
 transport-on-num : {x y : ℤ} {b : ℕ⁺} → x ≡ y → x / b ≡ y / b
 transport-on-num refl = refl
 
