@@ -82,3 +82,6 @@ lemma-·-commutative (neg x) (neg y) = cong pos (ℕ⁺.lemma-×-commutative y x
 
 lemma-·-associative : (a b c : ℤ) → (a · b) · c ≡ a · (b · c)
 lemma-·-associative a b c = {!!}
+
+lemma-·-reverse-cong : {a b c : ℤ} → a · c ≡ b · c → a ≡ b
+lemma-·-reverse-cong {a} {b} {c} p = {!!}

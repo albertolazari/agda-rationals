@@ -48,7 +48,7 @@ step₂    : (a · f) · (c · d) ≡ (e · b) · (c · d)
 
 --- Conclusion ---
 step₂: (a · f) · (c · d) ≡ (e · b) · (c · d)
--------------------------------------------- sym (cong (_· (c · d)))
+-------------------------------------------- lemma-·-reverse-cong
 a · f ≡ e · b
 -}
 aux₁ : {a b c d : ℤ} → a ≡ b → c ≡ d
@@ -79,8 +79,9 @@ trans : {x y z : ℚ} → x ≈ y → y ≈ z → x ≈ z
 trans {a / b} {c / d} {e / f} (eq p) (eq q)
   with aux₁ p q
   with aux₂ a (pos d) c (pos f)
-  with aux₃ a (pos f) c (pos d)
-... | a₁ | a₂ | a₃ = eq {!!}
+... | a₁ | a₂ with ≡.trans (≡.sym a₁) a₂ with aux₃ c (pos b) e (pos d)
+... | step₁ | a₃ with ≡.trans (≡.sym step₁) a₃
+... | step₂ = eq (ℤ.lemma-·-reverse-cong step₂)
 
 ≡→≈ : {x y : ℚ} → x ≡ y → x ≈ y
 ≡→≈ refl = eq refl
