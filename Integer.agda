@@ -1,5 +1,6 @@
 {-# OPTIONS --allow-unsolved-metas #-}
 open import Relation.Binary.PropositionalEquality
+open ≡-Reasoning
 
 open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
 
@@ -8,6 +9,14 @@ data ℤ : Set where
   zero : ℤ
   pos  : ℕ⁺ → ℤ
   neg  : ℕ⁺ → ℤ
+
+lemma-pos-reverse-cong : {a b : ℕ⁺} → pos a ≡ pos b → a ≡ b
+lemma-pos-reverse-cong {one} {one} p = refl
+lemma-pos-reverse-cong {succ a} {succ b} p = cong succ {!!}
+
+lemma-neg-reverse-cong : {a b : ℕ⁺} → neg a ≡ neg b → a ≡ b
+lemma-neg-reverse-cong {one} {one} p = refl
+lemma-neg-reverse-cong {succ a} {succ b} p = {!!}
 
 -_ : ℤ → ℤ
 - zero  = zero
@@ -56,6 +65,11 @@ lemma-×-one {zero}  = refl
 lemma-×-one {pos x} = cong pos ℕ⁺.lemma-×-one
 lemma-×-one {neg x} = cong neg ℕ⁺.lemma-×-one
 
+lemma-×-reverse-cong : {a b : ℤ} → (c : ℕ⁺) → a × c ≡ b × c → a ≡ b
+lemma-×-reverse-cong {zero}  {zero}  c p = refl
+lemma-×-reverse-cong {pos a} {pos b} c p = cong pos (ℕ⁺.lemma-×-reverse-cong (lemma-pos-reverse-cong p))
+lemma-×-reverse-cong {neg a} {neg b} c p = cong neg (ℕ⁺.lemma-×-reverse-cong (lemma-neg-reverse-cong p))
+
 _·_ : ℤ → ℤ → ℤ
 zero  · y = zero
 pos x · y = y × x
@@ -81,7 +95,15 @@ lemma-·-commutative (neg x) (pos y) = cong neg (ℕ⁺.lemma-×-commutative y x
 lemma-·-commutative (neg x) (neg y) = cong pos (ℕ⁺.lemma-×-commutative y x)
 
 lemma-·-associative : (a b c : ℤ) → (a · b) · c ≡ a · (b · c)
-lemma-·-associative a b c = {!!}
+lemma-·-associative zero    b c = refl
+lemma-·-associative (pos a) zero c = refl
+lemma-·-associative (pos a) (pos b) zero = refl
+lemma-·-associative (pos a) (pos b) (pos x) = {!!}
+lemma-·-associative (pos a) (pos b) (neg x) = {!!}
+lemma-·-associative (pos a) (neg b) c = {!!}
+lemma-·-associative (neg a) b c = {!!}
 
 lemma-·-reverse-cong : {a b c : ℤ} → a · c ≡ b · c → a ≡ b
-lemma-·-reverse-cong {a} {b} {c} p = {!!}
+lemma-·-reverse-cong {a} {b} {zero}  p = {!!}
+lemma-·-reverse-cong {a} {b} {pos c} p = {!!}
+lemma-·-reverse-cong {a} {b} {neg c} p = {!!}

@@ -58,3 +58,32 @@ lemma-×-commutative (succ x) (succ y) =
     succ x + (succ x × y)    ≡⟨ cong succ (cong (x +_) (lemma-×-commutative (succ x) y)) ⟩
     succ x + (y × succ x)    ≡⟨⟩
     succ y × succ x          ∎
+
+lemma-×-associative : (x y z : ℕ⁺) → (x × y) × z ≡ x × (y × z)
+lemma-×-associative one one      z = refl
+lemma-×-associative one (succ y) z = refl
+lemma-×-associative (succ x) y z = begin
+  (y + (x × y)) × z ≡⟨ {!!} ⟩
+  (succ x × y) × z ≡⟨ {!!} ⟩
+  succ x × (y × z) ≡⟨⟩
+  (y × z) + (x × (y × z)) ∎
+
+-- lemma-×-associative (succ x) one z = cong (z +_) (cong (_× z) (begin
+--     (x × one) ≡⟨ lemma-×-one ⟩
+--     x         ∎
+--   ))
+-- lemma-×-associative (succ x) (succ y) one = cong succ (begin
+--     (y + (x × succ y)) × one         ≡⟨ lemma-×-one ⟩
+--     y + (x × succ y)                 ≡⟨ cong (y +_) (cong (x ×_) (cong succ (sym lemma-×-one))) ⟩
+--     y + (x × succ (y × one))         ≡⟨ cong (_+ (x × succ (y × one))) (sym lemma-×-one) ⟩
+--     (y × one) + (x × succ (y × one)) ∎
+--   )
+-- lemma-×-associative (succ x) (succ y) (succ z) = {!!}
+
+lemma-×-reverse-cong : {a b c : ℕ⁺} → a × c ≡ b × c → a ≡ b
+lemma-×-reverse-cong {a} {b} {one} p = begin
+  a       ≡⟨ sym lemma-×-one ⟩
+  a × one ≡⟨ p ⟩
+  b × one ≡⟨ lemma-×-one ⟩
+  b ∎
+lemma-×-reverse-cong {a} {b} {succ c} p = {!!}
