@@ -49,7 +49,7 @@ module Trans where
   
   --- Conclusion ---
   step₂: (a · f) · (c · d) ≡ (e · b) · (c · d)
-  -------------------------------------------- lemma-·-reverse-cong
+  -------------------------------------------- lemma-·-pos-reverse-cong (c · d)
   a · f ≡ e · b
   -}
 
@@ -86,7 +86,9 @@ module Trans where
     with aux₃ c (pos b) e (pos d)
   ... | step₁ | a₃
     with ≡.trans (≡.sym step₁) a₃
-  ... | step₂ = eq (ℤ.lemma-·-reverse-cong step₂)
+  trans {zero / b} {zero / d} {zero / f} (eq refl) (eq refl) | a₁ | a₂ | step₁ | a₃ | step₂ = eq refl
+  trans {pos a / b} {pos c / d} {pos e / f} (eq p) (eq q) | a₁ | a₂ | step₁ | a₃ | step₂ = eq (≡.cong pos (ℕ⁺.lemma-×-reverse-cong₂ (d ℕ⁺.× c) (ℤ.lemma-pos-reverse-cong step₂)))
+  trans {neg a / b} {neg c / d} {neg e / f} (eq p) (eq q) | a₁ | a₂ | step₁ | a₃ | step₂ = eq (≡.cong neg (ℕ⁺.lemma-×-reverse-cong₂ (d ℕ⁺.× c) (ℤ.lemma-pos-reverse-cong step₂)))
 
 trans = Trans.trans
 
