@@ -11,12 +11,12 @@ data ℤ : Set where
   neg  : ℕ⁺ → ℤ
 
 lemma-pos-reverse-cong : {a b : ℕ⁺} → pos a ≡ pos b → a ≡ b
-lemma-pos-reverse-cong {one} {one} p = refl
-lemma-pos-reverse-cong {succ a} {succ b} p = cong succ {!!}
+lemma-pos-reverse-cong {one}    {one}    p    = refl
+lemma-pos-reverse-cong {succ a} {succ b} refl = refl
 
 lemma-neg-reverse-cong : {a b : ℕ⁺} → neg a ≡ neg b → a ≡ b
-lemma-neg-reverse-cong {one} {one} p = refl
-lemma-neg-reverse-cong {succ a} {succ b} p = {!!}
+lemma-neg-reverse-cong {one}    {one}    p    = refl
+lemma-neg-reverse-cong {succ a} {succ b} refl = refl
 
 -_ : ℤ → ℤ
 - zero  = zero
@@ -94,15 +94,24 @@ lemma-·-commutative (neg x) zero    = refl
 lemma-·-commutative (neg x) (pos y) = cong neg (ℕ⁺.lemma-×-commutative y x)
 lemma-·-commutative (neg x) (neg y) = cong pos (ℕ⁺.lemma-×-commutative y x)
 
-lemma-·-associative : (a b c : ℤ) → (a · b) · c ≡ a · (b · c)
-lemma-·-associative zero    b c = refl
-lemma-·-associative (pos a) zero c = refl
-lemma-·-associative (pos a) (pos b) zero = refl
-lemma-·-associative (pos a) (pos b) (pos x) = {!!}
-lemma-·-associative (pos a) (pos b) (neg x) = {!!}
-lemma-·-associative (pos a) (neg b) c = {!!}
-lemma-·-associative (neg a) b c = {!!}
+lemma-·-associative : (x y z : ℤ) → (x · y) · z ≡ x · (y · z)
+lemma-·-associative zero    y       z       = refl
+lemma-·-associative (pos x) zero    z       = refl
+lemma-·-associative (pos x) (pos y) zero    = refl
+lemma-·-associative (pos x) (pos y) (pos z) = cong pos (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (pos x) (pos y) (neg z) = cong neg (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (pos x) (neg y) zero    = refl
+lemma-·-associative (pos x) (neg y) (pos z) = cong neg (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (pos x) (neg y) (neg z) = cong pos (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (neg x) zero    z       = refl
+lemma-·-associative (neg x) (pos y) zero    = refl
+lemma-·-associative (neg x) (pos y) (pos z) = cong neg (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (neg x) (pos y) (neg z) = cong pos (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (neg x) (neg y) zero    = refl
+lemma-·-associative (neg x) (neg y) (pos z) = cong pos (sym (ℕ⁺.lemma-×-associative z y x))
+lemma-·-associative (neg x) (neg y) (neg z) = cong neg (sym (ℕ⁺.lemma-×-associative z y x))
 
+-- Unprovable TODO change
 lemma-·-reverse-cong : {a b c : ℤ} → a · c ≡ b · c → a ≡ b
 lemma-·-reverse-cong {a} {b} {zero}  p = {!!}
 lemma-·-reverse-cong {a} {b} {pos c} p = {!!}
