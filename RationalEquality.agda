@@ -19,35 +19,68 @@ sym : {x y : ℚ} → x ≈ y → y ≈ x
 sym (eq p) = eq (≡.sym p)
 
 {-
-a x d = c x b
-c x f = e x d
+Reasoning behind trans proof
+============================
+--- Step 1 ---
+p: a · d ≡ c · b
+q: c · f ≡ e · d
+----------------------------------------- aux₁
+a₁: (a · d) · (c · f) ≡ (c · b) · (e · d)
 
-(a x d) x (c x f) = (c x b) x (e x d)
-(a x f) x (c x d) = (e x b) x (c x d)
+a d c f
+----------------------------------------- aux₂
+a₂: (a · d) · (c · f) ≡ (a · f) · (c · d)
 
-a x f =
+sym a₁: (c · b) · (e · d) ≡ (a · d) · (c · f)
+    a₂: (a · d) · (c · f) ≡ (a · f) · (c · d)
+--------------------------------------------- trans
+step₁ : (c · b) · (e · d) ≡ (a · f) · (c · d)
 
-e x b
+--- Step 2 ---
+c b e d
+----------------------------------------- aux₃
+a₃: (c · b) · (e · d) ≡ (e · b) · (c · d)
+
+sym step₁: (a · f) · (c · d) ≡ (c · b) · (e · d)
+    a₃   : (c · b) · (e · d) ≡ (e · b) · (c · d)
+------------------------------------------------ trans
+step₂    : (a · f) · (c · d) ≡ (e · b) · (c · d)
+
+--- Conclusion ---
+step₂: (a · f) · (c · d) ≡ (e · b) · (c · d)
+-------------------------------------------- sym (cong (_· (c · d)))
+a · f ≡ e · b
 -}
-trans : {x y z : ℚ} → x ≈ y → y ≈ z → x ≈ z
-trans {a / b} {c / d} {e / f} (eq p) (eq q) = eq {!!}
-  where
-  aux₁ : (a b c d : ℤ)
-    → a ≡ b
-    → c ≡ d
-    → a ℤ.· c ≡ b ℤ.· d
-  aux₁ a b c d refl refl = refl
+aux₁ : {a b c d : ℤ} → a ≡ b → c ≡ d
+  → a ℤ.· c ≡ b ℤ.· d
+aux₁ refl refl = refl
 
-  aux₂ : (a b c d : ℤ) → (a ℤ.· b) ℤ.· (c ℤ.· d) ≡ (a ℤ.· d) ℤ.· (c ℤ.· b)
-  aux₂ a b c d = ≡-begin
-    (a ℤ.· b) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong ((a ℤ.· b) ℤ.·_) (≡.sym (ℤ.lemma-·-commutative d c)) ⟩
-    (a ℤ.· b) ℤ.· (d ℤ.· c) ≡⟨ ℤ.lemma-·-associative a b (d ℤ.· c) ⟩
-    a ℤ.· (b ℤ.· (d ℤ.· c)) ≡⟨ ≡.cong (a ℤ.·_) (≡.sym (ℤ.lemma-·-associative b d c)) ⟩
-    a ℤ.· ((b ℤ.· d) ℤ.· c) ≡⟨ ≡.cong (a ℤ.·_) (≡.cong (ℤ._· c) ( ℤ.lemma-·-commutative b d)) ⟩
-    a ℤ.· ((d ℤ.· b) ℤ.· c) ≡⟨ ≡.cong (a ℤ.·_) (ℤ.lemma-·-associative d b c) ⟩
-    a ℤ.· (d ℤ.· (b ℤ.· c)) ≡⟨ ≡.sym (ℤ.lemma-·-associative a d (b ℤ.· c)) ⟩
-    (a ℤ.· d) ℤ.· (b ℤ.· c) ≡⟨ ≡.cong ((a ℤ.· d) ℤ.·_) (ℤ.lemma-·-commutative b c) ⟩
-    (a ℤ.· d) ℤ.· (c ℤ.· b) ≡-∎
+aux₂ : (a b c d : ℤ) → (a ℤ.· b) ℤ.· (c ℤ.· d) ≡ (a ℤ.· d) ℤ.· (c ℤ.· b)
+aux₂ a b c d = ≡-begin
+  (a ℤ.· b) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong ((a ℤ.· b) ℤ.·_) (≡.sym (ℤ.lemma-·-commutative d c)) ⟩
+  (a ℤ.· b) ℤ.· (d ℤ.· c) ≡⟨ ℤ.lemma-·-associative a b (d ℤ.· c) ⟩
+  a ℤ.· (b ℤ.· (d ℤ.· c)) ≡⟨ ≡.cong (a ℤ.·_) (≡.sym (ℤ.lemma-·-associative b d c)) ⟩
+  a ℤ.· ((b ℤ.· d) ℤ.· c) ≡⟨ ≡.cong (a ℤ.·_) (≡.cong (ℤ._· c) ( ℤ.lemma-·-commutative b d)) ⟩
+  a ℤ.· ((d ℤ.· b) ℤ.· c) ≡⟨ ≡.cong (a ℤ.·_) (ℤ.lemma-·-associative d b c) ⟩
+  a ℤ.· (d ℤ.· (b ℤ.· c)) ≡⟨ ≡.sym (ℤ.lemma-·-associative a d (b ℤ.· c)) ⟩
+  (a ℤ.· d) ℤ.· (b ℤ.· c) ≡⟨ ≡.cong ((a ℤ.· d) ℤ.·_) (ℤ.lemma-·-commutative b c) ⟩
+  (a ℤ.· d) ℤ.· (c ℤ.· b) ≡-∎
+
+aux₃ : (a b c d : ℤ) → (a ℤ.· b) ℤ.· (c ℤ.· d) ≡ (c ℤ.· b) ℤ.· (a ℤ.· d)
+aux₃ a b c d = ≡-begin
+  (a ℤ.· b) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong (ℤ._· (c ℤ.· d)) (ℤ.lemma-·-commutative a b) ⟩
+  (b ℤ.· a) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong ((b ℤ.· a) ℤ.·_) (ℤ.lemma-·-commutative c d) ⟩
+  (b ℤ.· a) ℤ.· (d ℤ.· c) ≡⟨ aux₂ b a d c ⟩
+  (b ℤ.· c) ℤ.· (d ℤ.· a) ≡⟨ ≡.cong ((b ℤ.· c) ℤ.·_) (ℤ.lemma-·-commutative d a) ⟩
+  (b ℤ.· c) ℤ.· (a ℤ.· d) ≡⟨ ≡.cong (ℤ._· (a ℤ.· d)) (ℤ.lemma-·-commutative b c) ⟩
+  (c ℤ.· b) ℤ.· (a ℤ.· d) ≡-∎
+
+trans : {x y z : ℚ} → x ≈ y → y ≈ z → x ≈ z
+trans {a / b} {c / d} {e / f} (eq p) (eq q)
+  with aux₁ p q
+  with aux₂ a (pos d) c (pos f)
+  with aux₃ a (pos f) c (pos d)
+... | a₁ | a₂ | a₃ = eq {!!}
 
 ≡→≈ : {x y : ℚ} → x ≡ y → x ≈ y
 ≡→≈ refl = eq refl
