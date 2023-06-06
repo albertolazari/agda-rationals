@@ -10,13 +10,13 @@ data ℤ : Set where
   pos  : ℕ⁺ → ℤ
   neg  : ℕ⁺ → ℤ
 
-lemma-pos-reverse-cong : {a b : ℕ⁺} → pos a ≡ pos b → a ≡ b
+lemma-pos-reverse-cong : {x y : ℕ⁺} → pos x ≡ pos y → x ≡ y
 lemma-pos-reverse-cong {one}    {one}    p    = refl
-lemma-pos-reverse-cong {succ a} {succ b} refl = refl
+lemma-pos-reverse-cong {succ x} {succ y} refl = refl
 
-lemma-neg-reverse-cong : {a b : ℕ⁺} → neg a ≡ neg b → a ≡ b
+lemma-neg-reverse-cong : {x y : ℕ⁺} → neg x ≡ neg y → x ≡ y
 lemma-neg-reverse-cong {one}    {one}    p    = refl
-lemma-neg-reverse-cong {succ a} {succ b} refl = refl
+lemma-neg-reverse-cong {succ x} {succ y} refl = refl
 
 -_ : ℤ → ℤ
 - zero  = zero
@@ -65,10 +65,10 @@ lemma-×-one {zero}  = refl
 lemma-×-one {pos x} = cong pos ℕ⁺.lemma-×-one
 lemma-×-one {neg x} = cong neg ℕ⁺.lemma-×-one
 
-lemma-×-reverse-cong : {a b : ℤ} → (c : ℕ⁺) → a × c ≡ b × c → a ≡ b
-lemma-×-reverse-cong {zero}  {zero}  c p = refl
-lemma-×-reverse-cong {pos a} {pos b} c p = cong pos (ℕ⁺.lemma-×-reverse-cong (lemma-pos-reverse-cong p))
-lemma-×-reverse-cong {neg a} {neg b} c p = cong neg (ℕ⁺.lemma-×-reverse-cong (lemma-neg-reverse-cong p))
+lemma-×-reverse-cong : {x y : ℤ} → (z : ℕ⁺) → x × z ≡ y × z → x ≡ y
+lemma-×-reverse-cong {zero}  {zero}  z p = refl
+lemma-×-reverse-cong {pos x} {pos y} z p = cong pos (ℕ⁺.lemma-×-reverse-cong (lemma-pos-reverse-cong p))
+lemma-×-reverse-cong {neg x} {neg y} z p = cong neg (ℕ⁺.lemma-×-reverse-cong (lemma-neg-reverse-cong p))
 
 _·_ : ℤ → ℤ → ℤ
 zero  · y = zero
@@ -111,8 +111,15 @@ lemma-·-associative (neg x) (neg y) zero    = refl
 lemma-·-associative (neg x) (neg y) (pos z) = cong pos (sym (ℕ⁺.lemma-×-associative z y x))
 lemma-·-associative (neg x) (neg y) (neg z) = cong neg (sym (ℕ⁺.lemma-×-associative z y x))
 
--- Unprovable TODO change
-lemma-·-reverse-cong : {a b c : ℤ} → a · c ≡ b · c → a ≡ b
-lemma-·-reverse-cong {a} {b} {zero}  p = {!!}
-lemma-·-reverse-cong {a} {b} {pos c} p = {!!}
-lemma-·-reverse-cong {a} {b} {neg c} p = {!!}
+lemma-·-pos-reverse-cong : {x y : ℤ} (z : ℕ⁺) → x · pos z ≡ y · pos z → x ≡ y
+lemma-·-pos-reverse-cong {x} {y} z p = lemma-×-reverse-cong z (begin
+    x × z     ≡⟨ sym aux-·-pos→× ⟩
+    x · pos z ≡⟨ p ⟩
+    y · pos z ≡⟨ aux-·-pos→× ⟩
+    y × z     ∎
+  )
+  where
+  aux-·-pos→× : {x : ℤ} → {y : ℕ⁺} → x · pos y ≡ x × y
+  aux-·-pos→× {zero} {y} = refl
+  aux-·-pos→× {pos x} {y} = cong pos (ℕ⁺.lemma-×-commutative y x)
+  aux-·-pos→× {neg x} {y} = cong neg (ℕ⁺.lemma-×-commutative y x)
