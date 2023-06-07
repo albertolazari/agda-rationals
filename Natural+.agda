@@ -74,15 +74,20 @@ lemma-×-associative (succ x) (succ y) one = cong succ (begin
   )
 lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
   z + ((y + (x × succ y)) × succ z) ≡⟨ cong (z +_) (begin
-    (y + (x × succ y)) × succ z ≡⟨ cong (_× succ z) (cong (y +_) (lemma-×-commutative x (succ y))) ⟩
-    (y + (x + (y × x))) × succ z ≡⟨ lemma-×-commutative (y + (x + (y × x))) (succ z) ⟩
-    succ z × (y + (x + (y × x))) ≡⟨⟩
+    (y + (x × succ y)) × succ z                     ≡⟨ cong (_× succ z) (cong (y +_) (lemma-×-commutative x (succ y))) ⟩
+    (y + (x + (y × x))) × succ z                    ≡⟨ lemma-×-commutative (y + (x + (y × x))) (succ z) ⟩
+    succ z × (y + (x + (y × x)))                    ≡⟨⟩
     (y + (x + (y × x))) + (z × (y + (x + (y × x)))) ≡⟨ lemma-+-associative y (x + (y × x)) (z × (y + (x + (y × x)))) ⟩
     y + ((x + (y × x)) + (z × (y + (x + (y × x))))) ≡⟨ cong (y +_) (begin
-      (x + (y × x)) + (z × (y + (x + (y × x)))) ≡⟨ {!!} ⟩
+      (x + (y × x)) + (z × (y + (x + (y × x)))) ≡⟨ lemma-+-associative x (y × x) (z × (y + (x + (y × x)))) ⟩
+      x + ((y × x) + (z × (y + (x + (y × x))))) ≡⟨ cong (x +_) (begin
+        (y × x) + (z × (y + (x + (y × x)))) ≡⟨ {!!} ⟩
 
-      -- ...
+        -- ...
 
+        ((z + (y + (z × y))) × x) + (z × y) ∎
+      ) ⟩
+      x + (((z + (y + (z × y))) × x) + (z × y)) ≡⟨ sym (lemma-+-associative x ((z + (y + (z × y))) × x) (z × y)) ⟩
       (x + ((z + (y + (z × y))) × x)) + (z × y) ≡⟨ lemma-+-commutative (x + ((z + (y + (z × y))) × x)) (z × y) ⟩
       (z × y) + (x + ((z + (y + (z × y))) × x)) ∎
     ) ⟩
@@ -91,12 +96,12 @@ lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
   ) ⟩
   z + ((y + (z × y)) + (x + ((z + (y + (z × y))) × x))) ≡⟨ sym (lemma-+-associative z (y + (z × y)) (x + ((z + (y + (z × y))) × x))) ⟩
   (z + (y + (z × y))) + (x + ((z + (y + (z × y))) × x)) ≡⟨⟩
-  (z + (y + (z × y))) + (succ (z + (y + (z × y))) × x) ≡⟨ cong ((z + (y + (z × y))) +_) (lemma-×-commutative (succ (z + (y + (z × y)))) x) ⟩
-  (z + (y + (z × y))) + (x × succ (z + (y + (z × y)))) ≡⟨⟩
-  (z + (y + (z × y))) + (x × succ (z + (succ z × y))) ≡⟨ cong ((z + (y + (z × y))) +_) (cong (x ×_) (cong succ (cong (z +_) (lemma-×-commutative (succ z) y)))) ⟩
-  (z + (y + (z × y))) + (x × succ (z + (y × succ z))) ≡⟨⟩
-  (z + (succ z × y)) + (x × succ (z + (y × succ z))) ≡⟨ cong (_+ (x × succ (z + (y × succ z)))) (cong (z +_) (lemma-×-commutative (succ z) y)) ⟩
-  (z + (y × succ z)) + (x × succ (z + (y × succ z))) ∎
+  (z + (y + (z × y))) + (succ (z + (y + (z × y))) × x)  ≡⟨ cong ((z + (y + (z × y))) +_) (lemma-×-commutative (succ (z + (y + (z × y)))) x) ⟩
+  (z + (y + (z × y))) + (x × succ (z + (y + (z × y))))  ≡⟨⟩
+  (z + (y + (z × y))) + (x × succ (z + (succ z × y)))   ≡⟨ cong ((z + (y + (z × y))) +_) (cong (x ×_) (cong succ (cong (z +_) (lemma-×-commutative (succ z) y)))) ⟩
+  (z + (y + (z × y))) + (x × succ (z + (y × succ z)))   ≡⟨⟩
+  (z + (succ z × y)) + (x × succ (z + (y × succ z)))    ≡⟨ cong (_+ (x × succ (z + (y × succ z)))) (cong (z +_) (lemma-×-commutative (succ z) y)) ⟩
+  (z + (y × succ z)) + (x × succ (z + (y × succ z)))    ∎
   )
 
 lemma-×-reverse-cong₁ : {x y : ℕ⁺} → (z : ℕ⁺) → x × z ≡ y × z → x ≡ y
@@ -105,7 +110,7 @@ lemma-×-reverse-cong₁ {x} {y} one p = begin
   x × one ≡⟨ p ⟩
   y × one ≡⟨ lemma-×-one ⟩
   y ∎
-lemma-×-reverse-cong₁ (succ z) p = lemma-×-reverse-cong₁ z {!!}
+lemma-×-reverse-cong₁ {x} {y} (succ z) p = lemma-×-reverse-cong₁ z {!!}
 
 lemma-×-reverse-cong₂ : {x y : ℕ⁺} → (z : ℕ⁺) → z × x ≡ z × y → x ≡ y
 lemma-×-reverse-cong₂ {x} {y} z p = lemma-×-reverse-cong₁ z (aux-commutative z p)
