@@ -113,6 +113,9 @@ module ≈-Reasoning where
 
 open ≈-Reasoning
 
+lemma-zero : {x y : ℕ⁺} → zero / x ≈ zero / y
+lemma-zero = eq refl
+
 lemma-one : {n : ℕ⁺} → pos n / n ≈ pos one / one
 lemma-one = eq (≡.cong pos (≡.sym ℕ⁺.lemma-×-one))
 

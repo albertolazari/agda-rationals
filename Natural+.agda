@@ -73,11 +73,11 @@ lemma-×-associative (succ x) (succ y) one = cong succ (begin
     (y × one) + (x × succ (y × one)) ∎
   )
 lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
-    z + ((y + (x × succ y)) × succ z) ≡⟨ {!!} ⟩
-    z + ((succ x × succ y) × succ z) ≡⟨ {!!} ⟩
-    succ (succ x × succ y) × succ z ≡⟨ {!!} ⟩
-    (succ x × succ y) × succ z ≡⟨ {!!} ⟩
-    succ x × (succ y × succ z) ≡⟨ {!!} ⟩
+    z + ((y + (x × succ y)) × succ z) ≡⟨ cong (z +_) (cong (_× succ z) (cong (y +_) (lemma-×-commutative x (succ y)))) ⟩
+    z + ((y + (x + (y × x))) × succ z) ≡⟨ cong (z +_) (lemma-×-commutative (y + (x + (y × x))) (succ z)) ⟩
+    z + (succ z × (y + (x + (y × x)))) ≡⟨⟩
+    z + ((y + (x + (y × x))) + (z × (y + (x + (y × x))))) ≡⟨ {!!} ⟩
+    (z + (y + (x + (y × x)))) + (z × (y + (x + (y × x)))) ≡⟨ {!!} ⟩
     (z + (y × succ z)) + (x × succ (z + (y × succ z))) ∎
   )
 
@@ -87,10 +87,7 @@ lemma-×-reverse-cong₁ {x} {y} one p = begin
   x × one ≡⟨ p ⟩
   y × one ≡⟨ lemma-×-one ⟩
   y ∎
-lemma-×-reverse-cong₁ {one}    {one}    (succ z) p = refl
-lemma-×-reverse-cong₁ {one}    {succ y} (succ z) p = {!!}
-lemma-×-reverse-cong₁ {succ x} {one}    (succ z) p = {!!}
-lemma-×-reverse-cong₁ {succ x} {succ y} (succ z) p = {!!}
+lemma-×-reverse-cong₁ {x} {y} (succ z) p = lemma-×-reverse-cong₁ z {!!}
 
 lemma-×-reverse-cong₂ : {x y : ℕ⁺} → (z : ℕ⁺) → z × x ≡ z × y → x ≡ y
 lemma-×-reverse-cong₂ {x} {y} z p = lemma-×-reverse-cong₁ z (aux-commutative z p)
