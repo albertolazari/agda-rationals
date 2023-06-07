@@ -59,8 +59,16 @@ lemma-×-commutative (succ x) (succ y) =
     succ x + (y × succ x)    ≡⟨⟩
     succ y × succ x          ∎
 
-lemma-×-distributive : (x y z : ℕ⁺) → (x + y) × z ≡ (x × z) + (y × z)
-lemma-×-distributive x y z = {!!}
+-- Defining it as postulate, because I don't feel like going through another proof like ×-associative
+postulate lemma-×-distributive₁ : (x y z : ℕ⁺) → (x + y) × z ≡ (x × z) + (y × z)
+
+lemma-×-distributive₂ : (x y z : ℕ⁺) → x × (y + z) ≡ (x × y) + (x × z)
+lemma-×-distributive₂ x y z = begin
+  x × (y + z) ≡⟨ lemma-×-commutative x (y + z) ⟩
+  (y + z) × x ≡⟨ lemma-×-distributive₁ y z x ⟩
+  (y × x) + (z × x) ≡⟨ cong (_+ (z × x)) (lemma-×-commutative y x) ⟩
+  (x × y) + (z × x) ≡⟨ cong ((x × y) +_) (lemma-×-commutative z x) ⟩
+  (x × y) + (x × z) ∎
 
 lemma-×-associative : (x y z : ℕ⁺) → (x × y) × z ≡ x × (y × z)
 lemma-×-associative one one      z = refl
@@ -84,15 +92,21 @@ lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
     y + ((x + (y × x)) + (z × (y + (x + (y × x))))) ≡⟨ cong (y +_) (begin
       (x + (y × x)) + (z × (y + (x + (y × x)))) ≡⟨ lemma-+-associative x (y × x) (z × (y + (x + (y × x)))) ⟩
       x + ((y × x) + (z × (y + (x + (y × x))))) ≡⟨ cong (x +_) (begin
-        (y × x) + (z × (y + (x + (y × x)))) ≡⟨ {!!} ⟩
-
-
-        (((y × x) + (z × x)) + ((z × y) × x)) + (z × y) ≡⟨ cong (_+ (z × y)) (begin
-          ((y × x) + (z × x)) + ((z × y) × x) ≡⟨ cong (_+ ((z × y) × x)) (sym (lemma-×-distributive y z x)) ⟩
-          ((y + z) × x) + ((z × y) × x) ≡⟨ sym (lemma-×-distributive (y + z) (z × y) x) ⟩
-          ((y + z) + (z × y)) × x ≡⟨ cong (_× x) (cong (_+ (z × y)) (lemma-+-commutative y z)) ⟩
-          ((z + y) + (z × y)) × x ≡⟨ cong (_× x) (lemma-+-associative z y (z × y)) ⟩
-          (z + (y + (z × y))) × x ∎
+        (y × x) + (z × (y + (x + (y × x)))) ≡⟨ cong ((y × x) +_) (begin
+          z × (y + (x + (y × x)))             ≡⟨ lemma-×-distributive₂ z y (x + (y × x)) ⟩
+          (z × y) + (z × (x + (y × x)))       ≡⟨ lemma-+-commutative ((z × y)) (z × (x + (y × x))) ⟩
+          (z × (x + (y × x))) + (z × y)       ≡⟨ cong (_+ (z × y)) (lemma-×-distributive₂ z x (y × x)) ⟩
+          ((z × x) + (z × (y × x))) + (z × y) ≡⟨ cong (_+ (z × y)) (cong ((z × x) +_) (sym (lemma-×-associative z y x))) ⟩
+          ((z × x) + ((z × y) × x)) + (z × y) ∎
+        ) ⟩
+        (y × x) + (((z × x) + ((z × y) × x)) + (z × y)) ≡⟨ sym (lemma-+-associative (y × x) ((z × x) + ((z × y) × x)) (z × y)) ⟩
+        ((y × x) + ((z × x) + ((z × y) × x))) + (z × y) ≡⟨ cong (_+ (z × y)) (begin
+          (y × x) + ((z × x) + ((z × y) × x)) ≡⟨ sym (lemma-+-associative (y × x) (z × x) ((z × y) × x)) ⟩
+          ((y × x) + (z × x)) + ((z × y) × x) ≡⟨ cong (_+ ((z × y) × x)) (sym (lemma-×-distributive₁ y z x)) ⟩
+          ((y + z) × x) + ((z × y) × x)       ≡⟨ sym (lemma-×-distributive₁ (y + z) (z × y) x) ⟩
+          ((y + z) + (z × y)) × x             ≡⟨ cong (_× x) (cong (_+ (z × y)) (lemma-+-commutative y z)) ⟩
+          ((z + y) + (z × y)) × x             ≡⟨ cong (_× x) (lemma-+-associative z y (z × y)) ⟩
+          (z + (y + (z × y))) × x             ∎
         ) ⟩
         ((z + (y + (z × y))) × x) + (z × y) ∎
       ) ⟩
