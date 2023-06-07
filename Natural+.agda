@@ -59,6 +59,9 @@ lemma-×-commutative (succ x) (succ y) =
     succ x + (y × succ x)    ≡⟨⟩
     succ y × succ x          ∎
 
+lemma-×-distributive : (x y z : ℕ⁺) → (x + y) × z ≡ (x × z) + (y × z)
+lemma-×-distributive x y z = {!!}
+
 lemma-×-associative : (x y z : ℕ⁺) → (x × y) × z ≡ x × (y × z)
 lemma-×-associative one one      z = refl
 lemma-×-associative one (succ y) z = refl
@@ -83,8 +86,14 @@ lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
       x + ((y × x) + (z × (y + (x + (y × x))))) ≡⟨ cong (x +_) (begin
         (y × x) + (z × (y + (x + (y × x)))) ≡⟨ {!!} ⟩
 
-        -- ...
 
+        (((y × x) + (z × x)) + ((z × y) × x)) + (z × y) ≡⟨ cong (_+ (z × y)) (begin
+          ((y × x) + (z × x)) + ((z × y) × x) ≡⟨ cong (_+ ((z × y) × x)) (sym (lemma-×-distributive y z x)) ⟩
+          ((y + z) × x) + ((z × y) × x) ≡⟨ sym (lemma-×-distributive (y + z) (z × y) x) ⟩
+          ((y + z) + (z × y)) × x ≡⟨ cong (_× x) (cong (_+ (z × y)) (lemma-+-commutative y z)) ⟩
+          ((z + y) + (z × y)) × x ≡⟨ cong (_× x) (lemma-+-associative z y (z × y)) ⟩
+          (z + (y + (z × y))) × x ∎
+        ) ⟩
         ((z + (y + (z × y))) × x) + (z × y) ∎
       ) ⟩
       x + (((z + (y + (z × y))) × x) + (z × y)) ≡⟨ sym (lemma-+-associative x ((z + (y + (z × y))) × x) (z × y)) ⟩
