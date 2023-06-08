@@ -126,12 +126,12 @@ lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
   (z + (y × succ z)) + (x × succ (z + (y × succ z)))    ∎
   )
 
-postulate lemma-×-reverse-cong₁ : {x y : ℕ⁺} → (z : ℕ⁺)
+postulate lemma-×-injective₁ : {x y : ℕ⁺} → (z : ℕ⁺)
             → x × z ≡ y × z
             → x ≡ y
 
-lemma-×-reverse-cong₂ : {x y : ℕ⁺} → (z : ℕ⁺) → z × x ≡ z × y → x ≡ y
-lemma-×-reverse-cong₂ {x} {y} z p = lemma-×-reverse-cong₁ z (aux-commutative z p)
+lemma-×-injective₂ : {x y : ℕ⁺} → (z : ℕ⁺) → z × x ≡ z × y → x ≡ y
+lemma-×-injective₂ {x} {y} z p = lemma-×-injective₁ z (aux-commutative z p)
   where
   aux-commutative : {x y : ℕ⁺} → (z : ℕ⁺)
     → z × x ≡ z × y

@@ -10,13 +10,13 @@ data ℤ : Set where
   pos  : ℕ⁺ → ℤ
   neg  : ℕ⁺ → ℤ
 
-lemma-pos-reverse-cong : {x y : ℕ⁺} → pos x ≡ pos y → x ≡ y
-lemma-pos-reverse-cong {one}    {one}    p    = refl
-lemma-pos-reverse-cong {succ x} {succ y} refl = refl
+lemma-pos-injective : {x y : ℕ⁺} → pos x ≡ pos y → x ≡ y
+lemma-pos-injective {one}    {one}    p    = refl
+lemma-pos-injective {succ x} {succ y} refl = refl
 
-lemma-neg-reverse-cong : {x y : ℕ⁺} → neg x ≡ neg y → x ≡ y
-lemma-neg-reverse-cong {one}    {one}    p    = refl
-lemma-neg-reverse-cong {succ x} {succ y} refl = refl
+lemma-neg-injective : {x y : ℕ⁺} → neg x ≡ neg y → x ≡ y
+lemma-neg-injective {one}    {one}    p    = refl
+lemma-neg-injective {succ x} {succ y} refl = refl
 
 -_ : ℤ → ℤ
 - zero  = zero
@@ -65,10 +65,10 @@ lemma-×-one {zero}  = refl
 lemma-×-one {pos x} = cong pos ℕ⁺.lemma-×-one
 lemma-×-one {neg x} = cong neg ℕ⁺.lemma-×-one
 
-lemma-×-reverse-cong : {x y : ℤ} → (z : ℕ⁺) → x × z ≡ y × z → x ≡ y
-lemma-×-reverse-cong {zero}  {zero}  z p = refl
-lemma-×-reverse-cong {pos x} {pos y} z p = cong pos (ℕ⁺.lemma-×-reverse-cong₁ z (lemma-pos-reverse-cong p))
-lemma-×-reverse-cong {neg x} {neg y} z p = cong neg (ℕ⁺.lemma-×-reverse-cong₁ z (lemma-neg-reverse-cong p))
+lemma-×-injective : {x y : ℤ} → (z : ℕ⁺) → x × z ≡ y × z → x ≡ y
+lemma-×-injective {zero}  {zero}  z p = refl
+lemma-×-injective {pos x} {pos y} z p = cong pos (ℕ⁺.lemma-×-injective₁ z (lemma-pos-injective p))
+lemma-×-injective {neg x} {neg y} z p = cong neg (ℕ⁺.lemma-×-injective₁ z (lemma-neg-injective p))
 
 _·_ : ℤ → ℤ → ℤ
 zero  · y = zero

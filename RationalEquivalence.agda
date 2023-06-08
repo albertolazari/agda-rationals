@@ -7,13 +7,12 @@ open import Integer  as ℤ  using (ℤ; zero; pos; neg; _×_)
 open import Rational as ℚ  using (ℚ; _/_; num; den; ℤ-den; _·_)
 open import Option
 
-module RationalEquality where
+module RationalEquivalence where
 infix 5 _≈_
 data _≈_ : ℚ → ℚ → Set where
   eq : {x y : ℚ} → num x ℤ.· ℤ-den y ≡ num y ℤ.· ℤ-den x → x ≈ y
 
-cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → f x ≈ f y
-cong {x} {y} f (eq p) = eq {!!}
+postulate cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → f x ≈ f y
 
 sym : {x y : ℚ} → x ≈ y → y ≈ x
 sym (eq p) = eq (≡.sym p)
@@ -49,7 +48,7 @@ module Trans where
   
   --- Conclusion ---
   step₂: (a · f) · (c · d) ≡ (e · b) · (c · d)
-  -------------------------------------------- lemma-·-pos-reverse-cong (c · d)
+  -------------------------------------------- lemma-×-injective₂ (d × c) (lemma-pos-injective step₂)
   a · f ≡ e · b
   -}
 
@@ -87,8 +86,8 @@ module Trans where
   ... | step₁ | a₃
     with ≡.trans (≡.sym step₁) a₃
   trans {zero / b} {zero / d} {zero / f} (eq refl) (eq refl) | a₁ | a₂ | step₁ | a₃ | step₂ = eq refl
-  trans {pos a / b} {pos c / d} {pos e / f} (eq p) (eq q) | a₁ | a₂ | step₁ | a₃ | step₂ = eq (≡.cong pos (ℕ⁺.lemma-×-reverse-cong₂ (d ℕ⁺.× c) (ℤ.lemma-pos-reverse-cong step₂)))
-  trans {neg a / b} {neg c / d} {neg e / f} (eq p) (eq q) | a₁ | a₂ | step₁ | a₃ | step₂ = eq (≡.cong neg (ℕ⁺.lemma-×-reverse-cong₂ (d ℕ⁺.× c) (ℤ.lemma-pos-reverse-cong step₂)))
+  trans {pos a / b} {pos c / d} {pos e / f} (eq p) (eq q) | a₁ | a₂ | step₁ | a₃ | step₂ = eq (≡.cong pos (ℕ⁺.lemma-×-injective₂ (d ℕ⁺.× c) (ℤ.lemma-pos-injective step₂)))
+  trans {neg a / b} {neg c / d} {neg e / f} (eq p) (eq q) | a₁ | a₂ | step₁ | a₃ | step₂ = eq (≡.cong neg (ℕ⁺.lemma-×-injective₂ (d ℕ⁺.× c) (ℤ.lemma-pos-injective step₂)))
 
 trans = Trans.trans
 
