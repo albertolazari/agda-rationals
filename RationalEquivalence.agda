@@ -1,5 +1,6 @@
 {-# OPTIONS --allow-unsolved-metas #-}
 open import Relation.Binary.PropositionalEquality as ≡ hiding (cong; sym; trans)
+open import Relation.Nullary.Negation
 open ≡-Reasoning renaming (begin_ to ≡-begin_; _∎ to _≡-∎)
 
 open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
@@ -12,7 +13,10 @@ infix 5 _≈_
 data _≈_ : ℚ → ℚ → Set where
   eq : {x y : ℚ} → num x ℤ.· ℤ-den y ≡ num y ℤ.· ℤ-den x → x ≈ y
 
-postulate cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → f x ≈ f y
+-- Not true actually
+-- TODO: figure out how to fix
+cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → f x ≈ f y
+cong {a / b} {c / d} f (eq p) = eq {!!}
 
 sym : {x y : ℚ} → x ≈ y → y ≈ x
 sym (eq p) = eq (≡.sym p)
@@ -123,3 +127,8 @@ lemma-·-one {x} {n} = begin
   x · (pos n / n)     ≈⟨ cong (x ·_) lemma-one ⟩
   x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
   x                   ∎
+
+lemma-√2-∉-ℚ : {x : ℚ} → ¬ (x · x ≈ pos (succ one) / one)
+lemma-√2-∉-ℚ {zero  / b} = {!!}
+lemma-√2-∉-ℚ {pos a / b} = {!!}
+lemma-√2-∉-ℚ {neg a / b} = {!!}

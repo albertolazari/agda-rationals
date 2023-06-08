@@ -10,6 +10,9 @@ data ℤ : Set where
   pos  : ℕ⁺ → ℤ
   neg  : ℕ⁺ → ℤ
 
+data ≠-zero : ℤ → Set where
+  -- TODO: complete
+
 lemma-pos-injective : {x y : ℕ⁺} → pos x ≡ pos y → x ≡ y
 lemma-pos-injective {one}    {one}    p    = refl
 lemma-pos-injective {succ x} {succ y} refl = refl
