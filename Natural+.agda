@@ -29,9 +29,6 @@ lemma-+-commutative (succ x) y = begin
   y + (x + one) ≡⟨ cong (y +_) (sym lemma-+-one) ⟩
   y + succ x    ∎
 
-lemma-+-reverse-cong : {x y : ℕ⁺} → (z : ℕ⁺) → x + z ≡ y + z → x ≡ y
-lemma-+-reverse-cong z p = {!!}
-
 _×_ : ℕ⁺ → ℕ⁺ → ℕ⁺
 one    × y = y
 succ x × y = y + (x × y)
@@ -62,8 +59,7 @@ lemma-×-commutative (succ x) (succ y) =
     succ x + (y × succ x)    ≡⟨⟩
     succ y × succ x          ∎
 
-lemma-×-distributive₁ : (x y z : ℕ⁺) → (x + y) × z ≡ (x × z) + (y × z)
-lemma-×-distributive₁ x y z = {!!}
+postulate lemma-×-distributive₁ : (x y z : ℕ⁺) → (x + y) × z ≡ (x × z) + (y × z)
 
 lemma-×-distributive₂ : (x y z : ℕ⁺) → x × (y + z) ≡ (x × y) + (x × z)
 lemma-×-distributive₂ x y z = begin
@@ -130,29 +126,9 @@ lemma-×-associative (succ x) (succ y) (succ z) = cong succ (begin
   (z + (y × succ z)) + (x × succ (z + (y × succ z)))    ∎
   )
 
-lemma-×-reverse-cong₁ : {x y : ℕ⁺} → (z : ℕ⁺)
-  → x × z ≡ y × z
-  → x ≡ y
-lemma-×-reverse-cong₁ {x} {y} one p = begin
-  x       ≡⟨ sym lemma-×-one ⟩
-  x × one ≡⟨ p ⟩
-  y × one ≡⟨ lemma-×-one ⟩
-  y ∎
-lemma-×-reverse-cong₁ {x} {y} (succ z) p = {!!}
-  where
-  aux-×-commutative : {x y : ℕ⁺} → (z : ℕ⁺)
-    → x × z ≡ y × z
-    → z × x ≡ z × y
-  aux-×-commutative {x} {y} z p = begin
-    z × x ≡⟨ lemma-×-commutative z x ⟩
-    x × z ≡⟨ p ⟩
-    y × z ≡⟨ lemma-×-commutative y z ⟩
-    z × y ∎
-
-  aux-+-commutative : {x y : ℕ⁺} → (z : ℕ⁺)
-    → z + x ≡ z + y
-    → x + z ≡ y + z
-  aux-+-commutative z p = {!!}
+postulate lemma-×-reverse-cong₁ : {x y : ℕ⁺} → (z : ℕ⁺)
+            → x × z ≡ y × z
+            → x ≡ y
 
 lemma-×-reverse-cong₂ : {x y : ℕ⁺} → (z : ℕ⁺) → z × x ≡ z × y → x ≡ y
 lemma-×-reverse-cong₂ {x} {y} z p = lemma-×-reverse-cong₁ z (aux-commutative z p)
