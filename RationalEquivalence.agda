@@ -2,21 +2,21 @@
 open import Relation.Binary.PropositionalEquality as ≡ hiding (cong; sym; trans)
 open import Relation.Nullary.Negation
 open ≡-Reasoning renaming (begin_ to ≡-begin_; _∎ to _≡-∎)
+open import Data.Maybe
 
 open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
 open import Integer  as ℤ  using (ℤ; zero; pos; neg; _×_)
 open import Rational as ℚ  using (ℚ; _/_; num; den; ℤ-den; _·_)
-open import Option
 
 module RationalEquivalence where
 infix 5 _≈_
 data _≈_ : ℚ → ℚ → Set where
   eq : {x y : ℚ} → num x ℤ.· ℤ-den y ≡ num y ℤ.· ℤ-den x → x ≈ y
 
--- Not true actually
--- TODO: figure out how to fix
-cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → f x ≈ f y
-cong {a / b} {c / d} f (eq p) = eq {!!}
+cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → Maybe (f x ≈ f y)
+cong {zero / b} {c / d} f (eq p) = nothing
+cong {pos a / b} {pos c / d} f (eq p) = just (eq {!!})
+cong {neg a / b} {neg c / d} f (eq p) = just (eq {!!})
 
 sym : {x y : ℚ} → x ≈ y → y ≈ x
 sym (eq p) = eq (≡.sym p)
@@ -122,11 +122,13 @@ lemma-zero = eq refl
 lemma-one : {n : ℕ⁺} → pos n / n ≈ pos one / one
 lemma-one = eq (≡.cong pos (≡.sym ℕ⁺.lemma-×-one))
 
-lemma-·-one : {x : ℚ} {n : ℕ⁺} → x · (pos n / n) ≈ x
-lemma-·-one {x} {n} = begin
-  x · (pos n / n)     ≈⟨ cong (x ·_) lemma-one ⟩
-  x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
-  x                   ∎
+lemma-·-one : {x : ℚ} {n : ℕ⁺} → Maybe (x · (pos n / n) ≈ x)
+lemma-·-one {x} {n} = {!!}
+-- Old proof:
+-- lemma-·-one {x} {n} = begin
+--   x · (pos n / n)     ≈⟨ cong (x ·_) lemma-one ⟩
+--   x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
+--   x                   ∎
 
 lemma-√2-∉-ℚ : {x : ℚ} → ¬ (x · x ≈ pos (succ one) / one)
 lemma-√2-∉-ℚ {zero  / b} = {!!}

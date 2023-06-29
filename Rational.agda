@@ -1,10 +1,10 @@
 {-# OPTIONS --allow-unsolved-metas #-}
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
+open import Data.Maybe
 
 open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
 open import Integer  as ℤ  using (ℤ; zero; pos; neg; _×_)
-open import Option
 
 module Rational where
 data ℚ : Set where
@@ -88,16 +88,16 @@ _^ₙ_ : ℚ → ℕ⁺ → ℚ
 x ^ₙ one    = x
 x ^ₙ succ y = x · (x ^ₙ y)
 
-_^_ : ℚ → ℤ → Option ℚ
-x           ^ pos y = item (x ^ₙ y)
-(zero  / b) ^ neg y = empty
-(pos a / b) ^ neg y = item ((pos b / a) ^ₙ y)
-(neg a / b) ^ neg y = item ((neg b / a) ^ₙ y)
-(zero  / b) ^ zero  = empty
-(pos a / b) ^ zero  = item (pos one / one)
-(neg a / b) ^ zero  = item (pos one / one)
+_^_ : ℚ → ℤ → Maybe ℚ
+x           ^ pos y = just (x ^ₙ y)
+(zero  / b) ^ neg y = nothing
+(pos a / b) ^ neg y = just ((pos b / a) ^ₙ y)
+(neg a / b) ^ neg y = just ((neg b / a) ^ₙ y)
+(zero  / b) ^ zero  = nothing
+(pos a / b) ^ zero  = just (pos one / one)
+(neg a / b) ^ zero  = just (pos one / one)
 
-_∶_ : ℚ → ℚ → Option ℚ
+_∶_ : ℚ → ℚ → Maybe ℚ
 x ∶ y with y ^ neg one
-... | empty    = empty
-... | item 1/y = item (x · 1/y)
+... | nothing    = nothing
+... | just 1/y = just (x · 1/y)
