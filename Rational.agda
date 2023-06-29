@@ -40,7 +40,7 @@ lemma-+-zero₁ {a / b} = begin
   ((zero × b) ℤ.+ (a × one)) / (one ℕ⁺.× b) ≡⟨⟩
   (zero       ℤ.+ (a × one)) / b            ≡⟨⟩
                   (a × one)  / b            ≡⟨ transport-on-num ℤ.lemma-×-one ⟩
-                              a / b            ∎
+                           a / b            ∎
 
 lemma-+-zero₂ : {x : ℚ} →  x + (zero / one) ≡ x
 lemma-+-zero₂ {x} = begin

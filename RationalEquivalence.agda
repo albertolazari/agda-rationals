@@ -2,7 +2,6 @@
 open import Relation.Binary.PropositionalEquality as ≡ hiding (cong; sym; trans)
 open import Relation.Nullary.Negation
 open ≡-Reasoning renaming (begin_ to ≡-begin_; _∎ to _≡-∎)
-open import Data.Maybe
 
 open import Natural+ as ℕ⁺ using (ℕ⁺; one; succ)
 open import Integer  as ℤ  using (ℤ; zero; pos; neg; _×_)
@@ -13,10 +12,38 @@ infix 5 _≈_
 data _≈_ : ℚ → ℚ → Set where
   eq : {x y : ℚ} → num x ℤ.· ℤ-den y ≡ num y ℤ.· ℤ-den x → x ≈ y
 
-cong : {x y : ℚ} → (f : ℚ → ℚ) → x ≈ y → Maybe (f x ≈ f y)
-cong {zero / b} {c / d} f (eq p) = nothing
-cong {pos a / b} {pos c / d} f (eq p) = just (eq {!!})
-cong {neg a / b} {neg c / d} f (eq p) = just (eq {!!})
+lemma-·-cong : {x y : ℚ} → (z : ℚ) → x ≈ y → x · z ≈ y · z
+lemma-·-cong {a / b} {c / d} z (eq p) = eq (≡-begin
+    num ((a / b) · z) ℤ.· ℤ-den ((c / d) · z) ≡⟨ ≡.cong (ℤ._· ℤ-den ((c / d) · z)) (aux-·-num a b z) ⟩
+    (a ℤ.· num z) ℤ.· ℤ-den ((c / d) · z)     ≡⟨ ≡.cong (ℤ._·_ (a ℤ.· num z)) (aux-·-den c d z) ⟩
+    (a ℤ.· num z) ℤ.· (pos d ℤ.· ℤ-den z)     ≡⟨ {!!} ⟩
+    (a ℤ.· pos d) ℤ.· (num z ℤ.· ℤ-den z)     ≡⟨ ≡.cong (ℤ._· (num z ℤ.· ℤ-den z)) p ⟩
+    (c ℤ.· pos b) ℤ.· (num z ℤ.· ℤ-den z)     ≡⟨ {!!} ⟩
+    (c ℤ.· num z) ℤ.· (pos b ℤ.· ℤ-den z)     ≡⟨ ≡.sym (≡.cong (ℤ._·_ (c ℤ.· num z)) (aux-·-den a b z)) ⟩
+    (c ℤ.· num z) ℤ.· ℤ-den ((a / b) · z)     ≡⟨ ≡.sym (≡.cong (ℤ._· ℤ-den ((a / b) · z)) (aux-·-num c d z)) ⟩
+    num ((c / d) · z) ℤ.· ℤ-den ((a / b) · z) ≡-∎
+  )
+  where
+  aux-·-num : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → num ((a / b) · x) ≡ a ℤ.· num x 
+  aux-·-num a b (c / d) = refl
+
+  aux-·-den : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos b ℤ.· ℤ-den x
+  aux-·-den a b x = ≡-begin
+    ℤ-den ((a / b) · x) ≡⟨ aux₁ a b x ⟩
+    pos (b ℕ⁺.× den x)  ≡⟨ aux₂ b (den x) ⟩
+    pos b ℤ.· pos (den x)   ≡⟨ ≡.cong (pos b ℤ.·_) (aux₃ x) ⟩
+    pos b ℤ.· ℤ-den x   ≡-∎
+    where
+    aux₁ : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos (b ℕ⁺.× den x)
+    aux₁ a b (c / d) = refl
+
+    aux₂ : (x y : ℕ⁺) → pos (x ℕ⁺.× y) ≡ pos x ℤ.· pos y
+    aux₂ x one = ≡.cong pos ℕ⁺.lemma-×-one
+    aux₂ x (succ y) = ≡.cong pos (ℕ⁺.lemma-×-commutative x (succ y))
+
+    aux₃ : (x : ℚ) → pos (den x) ≡ ℤ-den x
+    aux₃ (a / b) = refl
+
 
 sym : {x y : ℚ} → x ≈ y → y ≈ x
 sym (eq p) = eq (≡.sym p)
@@ -122,13 +149,13 @@ lemma-zero = eq refl
 lemma-one : {n : ℕ⁺} → pos n / n ≈ pos one / one
 lemma-one = eq (≡.cong pos (≡.sym ℕ⁺.lemma-×-one))
 
-lemma-·-one : {x : ℚ} {n : ℕ⁺} → Maybe (x · (pos n / n) ≈ x)
-lemma-·-one {x} {n} = {!!}
--- Old proof:
--- lemma-·-one {x} {n} = begin
---   x · (pos n / n)     ≈⟨ cong (x ·_) lemma-one ⟩
---   x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
---   x                   ∎
+lemma-·-one : {x : ℚ} {n : ℕ⁺} → x · (pos n / n) ≈ x
+lemma-·-one {x} {n} = begin
+  x · (pos n / n)     ≈⟨ ≡→≈ (ℚ.lemma-·-commutative x (pos n / n)) ⟩
+  (pos n / n) · x     ≈⟨ lemma-·-cong x lemma-one ⟩
+  (pos one / one) · x ≈⟨ ≡→≈ (ℚ.lemma-·-commutative (pos one / one) x) ⟩
+  x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
+  x                   ∎
 
 lemma-√2-∉-ℚ : {x : ℚ} → ¬ (x · x ≈ pos (succ one) / one)
 lemma-√2-∉-ℚ {zero  / b} = {!!}
