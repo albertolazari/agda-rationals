@@ -1,4 +1,6 @@
-open import Rational.Base
-open import Rational.Equivalence
+{-# OPTIONS --allow-unsolved-metas #-}
 
 module Rational where
+
+open import Rational.Base public
+open import Rational.Equivalence public

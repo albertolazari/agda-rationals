@@ -126,16 +126,16 @@ module ≈-Reasoning where
 
 open ≈-Reasoning
 
-lemma-zero : {x y : ℕ⁺} → zero / x ≈ zero / y
-lemma-zero = eq refl
+lemma-≈-zero : {x y : ℕ⁺} → zero / x ≈ zero / y
+lemma-≈-zero = eq refl
 
-lemma-one : {n : ℕ⁺} → pos n / n ≈ pos one / one
-lemma-one = eq (≡.cong pos (≡.sym ℕ⁺.lemma-×-one))
+lemma-≈-one : {n : ℕ⁺} → pos n / n ≈ pos one / one
+lemma-≈-one = eq (≡.cong pos (≡.sym ℕ⁺.lemma-×-one))
 
-lemma-·-one : {x : ℚ} {n : ℕ⁺} → x · (pos n / n) ≈ x
-lemma-·-one {x} {n} = begin
+lemma-·-≈-one : {x : ℚ} {n : ℕ⁺} → x · (pos n / n) ≈ x
+lemma-·-≈-one {x} {n} = begin
   x · (pos n / n)     ≈⟨ ≡→≈ (ℚ.lemma-·-commutative x (pos n / n)) ⟩
-  (pos n / n) · x     ≈⟨ lemma-·-cong x lemma-one ⟩
+  (pos n / n) · x     ≈⟨ lemma-·-cong x lemma-≈-one ⟩
   (pos one / one) · x ≈⟨ ≡→≈ (ℚ.lemma-·-commutative (pos one / one) x) ⟩
   x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
   x                   ∎
