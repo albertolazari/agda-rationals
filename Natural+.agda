@@ -7,9 +7,16 @@ data ℕ⁺ : Set where
   one  : ℕ⁺
   succ : ℕ⁺ → ℕ⁺
 
+lemma-succ-injective : {x y : ℕ⁺} → succ x ≡ succ y → x ≡ y
+lemma-succ-injective refl = refl
+
 _+_ : ℕ⁺ → ℕ⁺ → ℕ⁺
 one    + y = succ y
 succ x + y = succ (x + y)
+
+lemma-+-≢-one : {x y : ℕ⁺} → x + y ≢ one
+lemma-+-≢-one {one} ()
+lemma-+-≢-one {succ x} ()
 
 lemma-+-one : {x : ℕ⁺} → succ x ≡ x + one
 lemma-+-one {one}    = refl
@@ -143,4 +150,7 @@ lemma-×-injective₂ {x} {y} z p = lemma-×-injective₁ z (aux-commutative z p
     y × z ∎
 
 lemma-√2-∉-ℕ⁺ : (x y : ℕ⁺) → x × x ≢ (y × y) × succ one
-lemma-√2-∉-ℕ⁺ x y contradiction = {!!}
+lemma-√2-∉-ℕ⁺ one one ()
+lemma-√2-∉-ℕ⁺ one (succ y) ()
+lemma-√2-∉-ℕ⁺ (succ x) one contradiction = lemma-+-≢-one (lemma-succ-injective contradiction)
+lemma-√2-∉-ℕ⁺ (succ x) (succ y) contradiction = {!!}
