@@ -10,6 +10,12 @@ data ℤ : Set where
   pos  : ℕ⁺ → ℤ
   neg  : ℕ⁺ → ℤ
 
+lemma-pos-≢-zero : {n : ℕ⁺} → (x : ℤ) → x ≡ pos n → x ≢ zero
+lemma-pos-≢-zero x refl ()
+
+lemma-neg-≢-zero : {n : ℕ⁺} → (x : ℤ) → x ≡ neg n → x ≢ zero
+lemma-neg-≢-zero x refl ()
+
 lemma-pos-injective : {x y : ℕ⁺} → pos x ≡ pos y → x ≡ y
 lemma-pos-injective {one}    {one}    p    = refl
 lemma-pos-injective {succ x} {succ y} refl = refl
