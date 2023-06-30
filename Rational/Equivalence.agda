@@ -36,19 +36,19 @@ lemma-·-cong {a / b} {c / d} z (eq p) = eq (≡-begin
   aux-·-den : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos b ℤ.· ℤ-den x
   aux-·-den a b x = ≡-begin
     ℤ-den ((a / b) · x) ≡⟨ aux a b x ⟩
-    pos (b ℕ⁺.× den x)  ≡⟨ lemma-·-swap₂ b (den x) ⟩
-    pos b ℤ.· pos (den x)   ≡⟨ ≡.cong (pos b ℤ.·_) (lemma-·-swap₁ x) ⟩
+    pos (b ℕ⁺.× den x)  ≡⟨ aux-distribute-pos b (den x) ⟩
+    pos b ℤ.· pos (den x)   ≡⟨ ≡.cong (pos b ℤ.·_) (aux-den→ℤ-den x) ⟩
     pos b ℤ.· ℤ-den x   ≡-∎
     where
     aux : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos (b ℕ⁺.× den x)
     aux a b (c / d) = refl
 
-    lemma-·-swap₂ : (x y : ℕ⁺) → pos (x ℕ⁺.× y) ≡ pos x ℤ.· pos y
-    lemma-·-swap₂ x one = ≡.cong pos ℕ⁺.lemma-×-one
-    lemma-·-swap₂ x (succ y) = ≡.cong pos (ℕ⁺.lemma-×-commutative x (succ y))
+    aux-distribute-pos : (x y : ℕ⁺) → pos (x ℕ⁺.× y) ≡ pos x ℤ.· pos y
+    aux-distribute-pos x one = ≡.cong pos ℕ⁺.lemma-×-one
+    aux-distribute-pos x (succ y) = ≡.cong pos (ℕ⁺.lemma-×-commutative x (succ y))
 
-    lemma-·-swap₁ : (x : ℚ) → pos (den x) ≡ ℤ-den x
-    lemma-·-swap₁ (a / b) = refl
+    aux-den→ℤ-den : (x : ℚ) → pos (den x) ≡ ℤ-den x
+    aux-den→ℤ-den (a / b) = refl
 
 
 sym : {x y : ℚ} → x ≈ y → y ≈ x
