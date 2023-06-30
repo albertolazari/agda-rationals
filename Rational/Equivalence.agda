@@ -1,5 +1,9 @@
 {-# OPTIONS --allow-unsolved-metas #-}
-open import Relation.Binary.PropositionalEquality as ≡ hiding (cong; sym; trans)
+
+module Rational.Equivalence where
+
+open import Relation.Binary.PropositionalEquality as ≡
+  hiding (cong; sym; trans)
 open import Relation.Nullary.Negation
 open ≡-Reasoning renaming (begin_ to ≡-begin_; _∎ to _≡-∎)
 
@@ -7,7 +11,6 @@ open import Natural+      as ℕ⁺ using (ℕ⁺; one; succ)
 open import Integer       as ℤ  using (ℤ; zero; pos; neg; _×_)
 open import Rational.Base as ℚ  using (ℚ; _/_; num; den; ℤ-den; _·_)
 
-module Rational.Equivalence where
 infix 5 _≈_ _≉_
 data _≈_ : ℚ → ℚ → Set where
   eq : {x y : ℚ} → num x ℤ.· ℤ-den y ≡ num y ℤ.· ℤ-den x → x ≈ y
@@ -123,24 +126,3 @@ module ≈-Reasoning where
   infix 1 begin_
   begin_ : {x y : ℚ} → x ≈ y → x ≈ y
   begin p = p
-
-open ≈-Reasoning
-
-lemma-≈-zero : {x y : ℕ⁺} → zero / x ≈ zero / y
-lemma-≈-zero = eq refl
-
-lemma-≈-one : {n : ℕ⁺} → pos n / n ≈ pos one / one
-lemma-≈-one = eq (≡.cong pos (≡.sym ℕ⁺.lemma-×-one))
-
-lemma-·-≈-one : {x : ℚ} {n : ℕ⁺} → x · (pos n / n) ≈ x
-lemma-·-≈-one {x} {n} = begin
-  x · (pos n / n)     ≈⟨ ≡→≈ (ℚ.lemma-·-commutative x (pos n / n)) ⟩
-  (pos n / n) · x     ≈⟨ lemma-·-cong x lemma-≈-one ⟩
-  (pos one / one) · x ≈⟨ ≡→≈ (ℚ.lemma-·-commutative (pos one / one) x) ⟩
-  x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
-  x                   ∎
-
-lemma-√2-∉-ℚ : {x : ℚ} → x · x ≉ pos (succ one) / one
-lemma-√2-∉-ℚ {zero  / b} (eq contradiction) = {!!}
-lemma-√2-∉-ℚ {pos a / b} (eq contradiction) = {!!}
-lemma-√2-∉-ℚ {neg a / b} (eq contradiction) = {!!}
