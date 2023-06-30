@@ -141,3 +141,6 @@ lemma-×-injective₂ {x} {y} z p = lemma-×-injective₁ z (aux-commutative z p
     z × x ≡⟨ p ⟩
     z × y ≡⟨ lemma-×-commutative z y ⟩
     y × z ∎
+
+lemma-√2-∉-ℕ⁺ : (x y : ℕ⁺) → x × x ≢ (y × y) × succ one
+lemma-√2-∉-ℕ⁺ x y contradiction = {!!}
