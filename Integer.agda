@@ -110,3 +110,35 @@ lemma-·-associative (neg x) (pos y) (neg z) = cong pos (sym (ℕ⁺.lemma-×-as
 lemma-·-associative (neg x) (neg y) zero    = refl
 lemma-·-associative (neg x) (neg y) (pos z) = cong pos (sym (ℕ⁺.lemma-×-associative z y x))
 lemma-·-associative (neg x) (neg y) (neg z) = cong neg (sym (ℕ⁺.lemma-×-associative z y x))
+  
+lemma-·-swap₂ : (a b c d : ℤ) → (a · b) · (c · d) ≡ (a · d) · (c · b)
+lemma-·-swap₂ a b c d = begin
+  (a · b) · (c · d) ≡⟨ cong ((a · b) ·_) (sym (lemma-·-commutative d c)) ⟩
+  (a · b) · (d · c) ≡⟨ lemma-·-associative a b (d · c) ⟩
+  a · (b · (d · c)) ≡⟨ cong (a ·_) (sym (lemma-·-associative b d c)) ⟩
+  a · ((b · d) · c) ≡⟨ cong (a ·_) (cong (_· c) ( lemma-·-commutative b d)) ⟩
+  a · ((d · b) · c) ≡⟨ cong (a ·_) (lemma-·-associative d b c) ⟩
+  a · (d · (b · c)) ≡⟨ sym (lemma-·-associative a d (b · c)) ⟩
+  (a · d) · (b · c) ≡⟨ cong ((a · d) ·_) (lemma-·-commutative b c) ⟩
+  (a · d) · (c · b) ∎
+
+lemma-·-swap₁ : (a b c d : ℤ) → (a · b) · (c · d) ≡ (c · b) · (a · d)
+lemma-·-swap₁ a b c d = begin
+  (a · b) · (c · d) ≡⟨ cong (_· (c · d)) (lemma-·-commutative a b) ⟩
+  (b · a) · (c · d) ≡⟨ cong ((b · a) ·_) (lemma-·-commutative c d) ⟩
+  (b · a) · (d · c) ≡⟨ lemma-·-swap₂ b a d c ⟩
+  (b · c) · (d · a) ≡⟨ cong ((b · c) ·_) (lemma-·-commutative d a) ⟩
+  (b · c) · (a · d) ≡⟨ cong (_· (a · d)) (lemma-·-commutative b c) ⟩
+  (c · b) · (a · d) ∎
+
+lemma-·-swap-inner : (a b c d : ℤ) → (a · b) · (c · d) ≡ (a · c) · (b · d)
+lemma-·-swap-inner a b c d = begin
+  (a · b) · (c · d) ≡⟨ lemma-·-associative a b (c · d) ⟩
+  a · (b · (c · d)) ≡⟨ cong (a ·_) (begin
+    b · (c · d) ≡⟨ sym (lemma-·-associative b c d) ⟩
+    (b · c) · d ≡⟨ cong (_· d) (lemma-·-commutative b c) ⟩
+    (c · b) · d ≡⟨ lemma-·-associative c b d ⟩
+    c · (b · d) ∎
+  ) ⟩
+  a · (c · (b · d)) ≡⟨ sym (lemma-·-associative a c (b · d)) ⟩
+  (a · c) · (b · d) ∎

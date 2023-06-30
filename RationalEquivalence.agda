@@ -16,9 +16,9 @@ lemma-·-cong : {x y : ℚ} → (z : ℚ) → x ≈ y → x · z ≈ y · z
 lemma-·-cong {a / b} {c / d} z (eq p) = eq (≡-begin
     num ((a / b) · z) ℤ.· ℤ-den ((c / d) · z) ≡⟨ ≡.cong (ℤ._· ℤ-den ((c / d) · z)) (aux-·-num a b z) ⟩
     (a ℤ.· num z) ℤ.· ℤ-den ((c / d) · z)     ≡⟨ ≡.cong (ℤ._·_ (a ℤ.· num z)) (aux-·-den c d z) ⟩
-    (a ℤ.· num z) ℤ.· (pos d ℤ.· ℤ-den z)     ≡⟨ {!!} ⟩
+    (a ℤ.· num z) ℤ.· (pos d ℤ.· ℤ-den z)     ≡⟨ ℤ.lemma-·-swap-inner a (num z) (pos d) (ℤ-den z) ⟩
     (a ℤ.· pos d) ℤ.· (num z ℤ.· ℤ-den z)     ≡⟨ ≡.cong (ℤ._· (num z ℤ.· ℤ-den z)) p ⟩
-    (c ℤ.· pos b) ℤ.· (num z ℤ.· ℤ-den z)     ≡⟨ {!!} ⟩
+    (c ℤ.· pos b) ℤ.· (num z ℤ.· ℤ-den z)     ≡⟨ ℤ.lemma-·-swap-inner c (pos b) (num z) (ℤ-den z) ⟩
     (c ℤ.· num z) ℤ.· (pos b ℤ.· ℤ-den z)     ≡⟨ ≡.sym (≡.cong (ℤ._·_ (c ℤ.· num z)) (aux-·-den a b z)) ⟩
     (c ℤ.· num z) ℤ.· ℤ-den ((a / b) · z)     ≡⟨ ≡.sym (≡.cong (ℤ._· ℤ-den ((a / b) · z)) (aux-·-num c d z)) ⟩
     num ((c / d) · z) ℤ.· ℤ-den ((a / b) · z) ≡-∎
@@ -29,20 +29,20 @@ lemma-·-cong {a / b} {c / d} z (eq p) = eq (≡-begin
 
   aux-·-den : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos b ℤ.· ℤ-den x
   aux-·-den a b x = ≡-begin
-    ℤ-den ((a / b) · x) ≡⟨ aux₁ a b x ⟩
-    pos (b ℕ⁺.× den x)  ≡⟨ aux₂ b (den x) ⟩
-    pos b ℤ.· pos (den x)   ≡⟨ ≡.cong (pos b ℤ.·_) (aux₃ x) ⟩
+    ℤ-den ((a / b) · x) ≡⟨ aux a b x ⟩
+    pos (b ℕ⁺.× den x)  ≡⟨ lemma-·-swap₂ b (den x) ⟩
+    pos b ℤ.· pos (den x)   ≡⟨ ≡.cong (pos b ℤ.·_) (lemma-·-swap₁ x) ⟩
     pos b ℤ.· ℤ-den x   ≡-∎
     where
-    aux₁ : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos (b ℕ⁺.× den x)
-    aux₁ a b (c / d) = refl
+    aux : (a : ℤ) → (b : ℕ⁺) → (x : ℚ) → ℤ-den ((a / b) · x) ≡ pos (b ℕ⁺.× den x)
+    aux a b (c / d) = refl
 
-    aux₂ : (x y : ℕ⁺) → pos (x ℕ⁺.× y) ≡ pos x ℤ.· pos y
-    aux₂ x one = ≡.cong pos ℕ⁺.lemma-×-one
-    aux₂ x (succ y) = ≡.cong pos (ℕ⁺.lemma-×-commutative x (succ y))
+    lemma-·-swap₂ : (x y : ℕ⁺) → pos (x ℕ⁺.× y) ≡ pos x ℤ.· pos y
+    lemma-·-swap₂ x one = ≡.cong pos ℕ⁺.lemma-×-one
+    lemma-·-swap₂ x (succ y) = ≡.cong pos (ℕ⁺.lemma-×-commutative x (succ y))
 
-    aux₃ : (x : ℚ) → pos (den x) ≡ ℤ-den x
-    aux₃ (a / b) = refl
+    lemma-·-swap₁ : (x : ℚ) → pos (den x) ≡ ℤ-den x
+    lemma-·-swap₁ (a / b) = refl
 
 
 sym : {x y : ℚ} → x ≈ y → y ≈ x
@@ -55,11 +55,11 @@ module Trans where
   --- Step 1 ---
   p: a · d ≡ c · b
   q: c · f ≡ e · d
-  ----------------------------------------- aux₁
+  ----------------------------------------- aux
   a₁: (a · d) · (c · f) ≡ (c · b) · (e · d)
   
   a d c f
-  ----------------------------------------- aux₂
+  ----------------------------------------- lemma-·-swap₂
   a₂: (a · d) · (c · f) ≡ (a · f) · (c · d)
   
   sym a₁: (c · b) · (e · d) ≡ (a · d) · (c · f)
@@ -69,7 +69,7 @@ module Trans where
   
   --- Step 2 ---
   c b e d
-  ----------------------------------------- aux₃
+  ----------------------------------------- lemma-·-swap₁
   a₃: (c · b) · (e · d) ≡ (e · b) · (c · d)
   
   sym step₁: (a · f) · (c · d) ≡ (c · b) · (e · d)
@@ -83,37 +83,17 @@ module Trans where
   a · f ≡ e · b
   -}
 
-  aux₁ : {a b c d : ℤ} → a ≡ b → c ≡ d
+  aux : {a b c d : ℤ} → a ≡ b → c ≡ d
     → a ℤ.· c ≡ b ℤ.· d
-  aux₁ refl refl = refl
-  
-  aux₂ : (a b c d : ℤ) → (a ℤ.· b) ℤ.· (c ℤ.· d) ≡ (a ℤ.· d) ℤ.· (c ℤ.· b)
-  aux₂ a b c d = ≡-begin
-    (a ℤ.· b) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong ((a ℤ.· b) ℤ.·_) (≡.sym (ℤ.lemma-·-commutative d c)) ⟩
-    (a ℤ.· b) ℤ.· (d ℤ.· c) ≡⟨ ℤ.lemma-·-associative a b (d ℤ.· c) ⟩
-    a ℤ.· (b ℤ.· (d ℤ.· c)) ≡⟨ ≡.cong (a ℤ.·_) (≡.sym (ℤ.lemma-·-associative b d c)) ⟩
-    a ℤ.· ((b ℤ.· d) ℤ.· c) ≡⟨ ≡.cong (a ℤ.·_) (≡.cong (ℤ._· c) ( ℤ.lemma-·-commutative b d)) ⟩
-    a ℤ.· ((d ℤ.· b) ℤ.· c) ≡⟨ ≡.cong (a ℤ.·_) (ℤ.lemma-·-associative d b c) ⟩
-    a ℤ.· (d ℤ.· (b ℤ.· c)) ≡⟨ ≡.sym (ℤ.lemma-·-associative a d (b ℤ.· c)) ⟩
-    (a ℤ.· d) ℤ.· (b ℤ.· c) ≡⟨ ≡.cong ((a ℤ.· d) ℤ.·_) (ℤ.lemma-·-commutative b c) ⟩
-    (a ℤ.· d) ℤ.· (c ℤ.· b) ≡-∎
-  
-  aux₃ : (a b c d : ℤ) → (a ℤ.· b) ℤ.· (c ℤ.· d) ≡ (c ℤ.· b) ℤ.· (a ℤ.· d)
-  aux₃ a b c d = ≡-begin
-    (a ℤ.· b) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong (ℤ._· (c ℤ.· d)) (ℤ.lemma-·-commutative a b) ⟩
-    (b ℤ.· a) ℤ.· (c ℤ.· d) ≡⟨ ≡.cong ((b ℤ.· a) ℤ.·_) (ℤ.lemma-·-commutative c d) ⟩
-    (b ℤ.· a) ℤ.· (d ℤ.· c) ≡⟨ aux₂ b a d c ⟩
-    (b ℤ.· c) ℤ.· (d ℤ.· a) ≡⟨ ≡.cong ((b ℤ.· c) ℤ.·_) (ℤ.lemma-·-commutative d a) ⟩
-    (b ℤ.· c) ℤ.· (a ℤ.· d) ≡⟨ ≡.cong (ℤ._· (a ℤ.· d)) (ℤ.lemma-·-commutative b c) ⟩
-    (c ℤ.· b) ℤ.· (a ℤ.· d) ≡-∎
+  aux refl refl = refl
   
   trans : {x y z : ℚ} → x ≈ y → y ≈ z → x ≈ z
   trans {a / b} {c / d} {e / f} (eq p) (eq q)
-    with aux₁ p q
-    with aux₂ a (pos d) c (pos f)
+    with aux p q
+    with ℤ.lemma-·-swap₂ a (pos d) c (pos f)
   ... | a₁ | a₂
     with ≡.trans (≡.sym a₁) a₂
-    with aux₃ c (pos b) e (pos d)
+    with ℤ.lemma-·-swap₁ c (pos b) e (pos d)
   ... | step₁ | a₃
     with ≡.trans (≡.sym step₁) a₃
   trans {zero / b} {zero / d} {zero / f} (eq refl) (eq refl) | a₁ | a₂ | step₁ | a₃ | step₂ = eq refl
