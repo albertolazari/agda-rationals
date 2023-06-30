@@ -25,6 +25,6 @@ lemma-·-≈-one {x} {n} = begin
   where open ≈-Reasoning
 
 lemma-√2-∉-ℚ : {x : ℚ} → x · x ≉ pos (succ one) / one
-lemma-√2-∉-ℚ {zero  / b} (eq contradiction) = {!!}
+lemma-√2-∉-ℚ {zero  / b} (eq contradiction) = ℤ.lemma-pos-≢-zero ((b ℕ⁺.× b) ℕ⁺.× succ one) (≡.sym contradiction)
 lemma-√2-∉-ℚ {pos a / b} (eq contradiction) = {!!}
 lemma-√2-∉-ℚ {neg a / b} (eq contradiction) = {!!}
