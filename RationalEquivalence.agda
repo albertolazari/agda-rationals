@@ -137,7 +137,11 @@ lemma-·-one {x} {n} = begin
   x · (pos one / one) ≈⟨ ≡→≈ ℚ.lemma-·-one ⟩
   x                   ∎
 
-lemma-√2-∉-ℚ : {x : ℚ} → ¬ (x · x ≈ pos (succ one) / one)
+infix 5 _≉_
+_≉_ : ℚ → ℚ → Set
+_≉_ x y = ¬ (x ≈ y)
+
+lemma-√2-∉-ℚ : {x : ℚ} → x · x ≉ pos (succ one) / one
 lemma-√2-∉-ℚ {zero  / b} = {!!}
 lemma-√2-∉-ℚ {pos a / b} = {!!}
 lemma-√2-∉-ℚ {neg a / b} = {!!}

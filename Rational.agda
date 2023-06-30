@@ -101,3 +101,15 @@ _∶_ : ℚ → ℚ → Maybe ℚ
 x ∶ y with y ^ neg one
 ... | nothing    = nothing
 ... | just 1/y = just (x · 1/y)
+
+lemma-same-den : {x y : ℤ} → {b : ℕ⁺} → x / b ≡ y / b → x ≡ y
+lemma-same-den refl = refl
+
+lemma-same-num : {a : ℤ} → {x y : ℕ⁺} → a / x ≡ a / y → x ≡ y
+lemma-same-num refl = refl
+
+lemma-≢-num : {x y : ℤ} → {b : ℕ⁺} → x ≢ y → x / b ≢ y / b
+lemma-≢-num x≢y contradiction = x≢y (lemma-same-den contradiction)
+
+lemma-≢-den : {a : ℤ} → {x y : ℕ⁺} → x ≢ y → a / x ≢ a / y
+lemma-≢-den x≢y contradiction = x≢y (lemma-same-num contradiction)
