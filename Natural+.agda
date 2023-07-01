@@ -149,8 +149,11 @@ lemma-×-injective₂ {x} {y} z p = lemma-×-injective₁ z (aux-commutative z p
     z × y ≡⟨ lemma-×-commutative z y ⟩
     y × z ∎
 
+-- Warning: not true as-is
+-- it would need a witness that x and y are coprime (GCD, actual normalization of the rational)
+-- then it can be proved that x and y are both even => contradiction (they were coprime)
 lemma-√2-∉-ℕ⁺ : (x y : ℕ⁺) → x × x ≢ (y × y) × succ one
-lemma-√2-∉-ℕ⁺ one one ()
-lemma-√2-∉-ℕ⁺ one (succ y) ()
-lemma-√2-∉-ℕ⁺ (succ x) one contradiction = lemma-+-≢-one (lemma-succ-injective contradiction)
-lemma-√2-∉-ℕ⁺ (succ x) (succ y) contradiction = {!!}
+lemma-√2-∉-ℕ⁺ one      one      ()
+lemma-√2-∉-ℕ⁺ one      (succ y) ()
+lemma-√2-∉-ℕ⁺ (succ x) one      contradiction = lemma-+-≢-one (lemma-succ-injective contradiction)
+lemma-√2-∉-ℕ⁺ (succ x) (succ y) contradiction = {!!} -- this hole can't be filled

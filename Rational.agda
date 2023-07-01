@@ -24,6 +24,7 @@ lemma-·-≈-one {x} {n} = begin
   x                   ∎
   where open ≈-Reasoning
 
+-- Not actually working, without the assumption that a and b are coprime
 lemma-√2-∉-ℚ : {x : ℚ} → x · x ≉ pos (succ one) / one
 lemma-√2-∉-ℚ {zero  / b} (eq contradiction) = ℤ.lemma-pos-≢-zero ((b ℕ⁺.× b) ℕ⁺.× succ one) (≡.sym contradiction)
 lemma-√2-∉-ℚ {pos a / b} (eq contradiction) = ℕ⁺.lemma-√2-∉-ℕ⁺ a b (ℤ.lemma-pos-injective contradiction)
